@@ -1,21 +1,21 @@
 |   layout  |   title | date | author  | tag |
 |  ----  | ----  | ---- | ---- | ---- |
 |  post | array |  2020-11-03 | Shawn_Song  | leetcode
+-------
 
-
-* 1. Two Sum
-* 283. Move Zeroes
-* 566. Reshape the Matrix
-* 485. Max Consecutive Ones
-* 240. Search a 2D Matrix II
-* 378. Kth Smallest Element in a Sorted Matrix
-* 645. Set Mismatch
-* 287. Find the duplicate number
-* 667. Beautiful Arrangement II
-* 697. Degree of an Array
-* 766. Toeplitz Matrix
-* 565. Array Nesting
-* 769. Max Chunks To Make Sorted
+* 1 Two Sum
+* 283 Move Zeroes
+* 566 Reshape the Matrix
+* 485 Max Consecutive Ones
+* 240 Search a 2D Matrix II
+* 378 Kth Smallest Element in a Sorted Matrix
+* 645 Set Mismatch
+* 287 Find the duplicate number
+* 667 Beautiful Arrangement II
+* 697 Degree of an Array
+* 766 Toeplitz Matrix
+* 565 Array Nesting
+* 769 Max Chunks To Make Sorted
 
 
 ## 1. Two Sum(Easy)
