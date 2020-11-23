@@ -225,7 +225,7 @@ class Solution:
             i, j = n - 1, 0
             num = 0
             # 设置终止条件是搜索到右上角为止
-            while i <= 0 and j > n:
+            while i >= 0 and j < n:
                 if matrix[i][j] <= mid:
                     num += i + 1
                     j + = 1
