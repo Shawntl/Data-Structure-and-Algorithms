@@ -7,3 +7,4 @@ Data Structure and Algorithms practice on leetcode with python which contains pr
 
 ## Algorithms
 - [binarySearch](leetcode/binarySearch/binarySearch.md)
+- [TwoPointers](leetcode/TwoPointers)
