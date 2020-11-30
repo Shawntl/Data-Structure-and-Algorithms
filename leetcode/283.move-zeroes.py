@@ -11,13 +11,12 @@ class Solution:
         Do not return anything, modify nums in-place instead.
         """
         idx = 0
-        for num in nums:
-            if num != 0:
-                nums[idx] = num
+        for i in nums:
+            if i != 0:
+                nums[idx] = i
                 idx += 1
-        while idx < len(nums):
-            nums[idx] = 0
-            idx += 1
+        for j in range(idx, len(nums)):
+            nums[j] = 0
     # def  moveZeroes(self, nums: List[int]) -> None:
     #     slower, faster = 0, 0
     #     while faster < len(nums):
