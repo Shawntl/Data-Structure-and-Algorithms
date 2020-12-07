@@ -7,9 +7,9 @@
 
 ## Recap
 * 141 Linked List Cycle
-这道题使用快慢指针，根据快指针是否“套圈”慢指针来判断是否形成环。
+这道题使用快慢指针，根据快指针是否“套圈”慢指针来判断是否形成环。  
 
-
+## Content
 * 160 Intersectionof Two Linked Lists(Recap 141)
 * 206 Reverse Linked List
 * 21 Merge Two Sorted Lists
