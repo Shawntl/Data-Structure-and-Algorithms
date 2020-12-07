@@ -104,7 +104,7 @@ class Solution:
 
 **思路**：和上一题相似，只是上一题的零元素换成了val，本质是将所有val移到数组末尾。
 
-## 26 Remove Duplicates from Soorted Array(Easy)
+## 26 Remove Duplicates from Sorted Array(Easy)
 
 [https://leetcode-cn.com/problems/remove-duplicates-from-sorted-array/](https://leetcode-cn.com/problems/remove-duplicates-from-sorted-array/)
 
