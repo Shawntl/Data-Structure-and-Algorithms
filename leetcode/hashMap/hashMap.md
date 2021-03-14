@@ -8,6 +8,8 @@
 
 ## Content
 * 299. bulls and cows
+* 242. Valid Anagram
+* 49. Group Anagram(Medium)
 
 ## 299. bulls and cows(Easy)
 
@@ -43,6 +45,44 @@ class Solution:
 **思路**：暴力法，两次遍历。利用字典先将频数存起来。
 
 
+## 242. Valid Anagram(Easy)
+
+[https://leetcode-cn.com/problems/valid-anagram/](https://leetcode-cn.com/problems/valid-anagram/)
+
+### Description
+给定两个字符串 s 和 t ，编写一个函数来判断 t 是否是 s 的字母异位词。
+
+### Solution
+```python
+class Solution:
+    def isAnagram(self, s: str, t: str) -> bool:
+        return collections.Counter(s) == collections.Counter(t)
+```
+思路：使用字典记录字符串内元素频数，比较字典是否相同。
+
+
+## 49.Group Anagram(Medium)
+
+[https://leetcode-cn.com/problems/group-anagrams/](https://leetcode-cn.com/problems/group-anagrams/)
+
+### Description
+给定一个字符串数组，将字母异位词组合在一起。字母异位词指字母相同，但排列不同的字符串。
+
+### Solution
+```python
+class Solution:
+    def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
+        anagram_dict = {}
+        for gram in strs:
+            key = ''.join(sorted(gram))
+            if key in anagram_dict.keys():
+                anagram_dict[key].append(gram)
+            else:
+                anagram_dict[key] = [gram]
+        return [group for group in anagram_dict.values()]
+
+```
+思路：首先想到创建一个字典，一个key映射一个anagram组，那么怎么表示key呢？key的特点是唯一的确定一个anagram组，所有的anagram字符频数一样只是顺序不同，但是key不能是一个可迭代的数据类型，例如字典。所以想到所有anagram按字母排序后是一样的，就以排序后的字符串作为字典的键值。
 
 
 
