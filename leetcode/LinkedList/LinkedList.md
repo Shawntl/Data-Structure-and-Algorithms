@@ -136,7 +136,7 @@ class Solution:
                 l2 = l2.next
                 p = p.next
         p.next = l1 if l1 else l2
-        return head.nex
+        return head.next
 ```
 
 **思路**：创建一个新的头指针，然后遍历两个链表，依次把小的元素所在的链表接入创建的指针。边界情况一个是其中一个链表为空，另一个情况是两个链表长度不一，一个链表会优先遍历完，直接把另一个链表接到最后即可。

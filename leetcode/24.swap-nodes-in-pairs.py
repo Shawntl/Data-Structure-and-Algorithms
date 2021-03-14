@@ -14,10 +14,8 @@ class Solution:
     def swapPairs(self, head: ListNode) -> ListNode:
         if not head or not head.next:
             return head
-        
         dummy = ListNode()
         dummy.next = head
-
         p = dummy
         while head and head.next:
             first = head
@@ -28,6 +26,8 @@ class Solution:
             p = first
             head = p.next
         return dummy.next
+
+
 
 # @lc code=end
 

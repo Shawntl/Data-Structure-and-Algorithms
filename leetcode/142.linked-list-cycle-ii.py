@@ -1,7 +1,7 @@
 #
-# @lc app=leetcode id=141 lang=python3
+# @lc app=leetcode id=142 lang=python3
 #
-# [141] Linked List Cycle
+# [142] Linked List Cycle II
 #
 
 # @lc code=start
@@ -12,16 +12,22 @@
 #         self.next = None
 
 class Solution:
-    def hasCycle(self, head: ListNode) -> bool:
+    def detectCycle(self, head: ListNode) -> ListNode:
         if not head or not head.next:
-            return False
+            return 
         slower, faster = head, head
         while faster and faster.next:
             slower = slower.next
             faster = faster.next.next
             if slower == faster:
-                return True
-        return False
+                break
+        if not faster or not faster.next:
+            return
+        faster = head
+        while faster != slower:
+            faster, slower = faster.next, slower.next
+        return faster
+
         
 # @lc code=end
 

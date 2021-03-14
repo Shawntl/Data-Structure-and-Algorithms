@@ -6,6 +6,7 @@
 # 双指针（快慢指针）
 
 * 141 Linked List Cycle
+* 142 Linked List Cycle II
 * 283 Move Zeros
 * 27 Remove Element
 * 26 Remove Duplicates from Sorted Array
@@ -28,23 +29,53 @@
 ```python
 class Solution:
     def hasCycle(self, head: ListNode) -> bool:
-        if not head or head.next == None:
+        if not head or not head.next:
             return False
-        slower, faster = head, head.next
-        while slower and faster:
+        slower, faster = head, head
+        while faster and faster.next:
+            slower = slower.next
+            faster = faster.next.next
             if slower == faster:
                 return True
-            slower = slower.next
-            if faster.next:
-                faster = faster.next.next
-            else:
-                return False
-
         return False
 ```
 
 **思路**：一个指针快一个指针慢，如果存在环，一定会有一个指针把另外一个指针“套圈”。另外如果不存在环，快指针一定先到达终点，一旦快指针到达终点，就可以停止循环，返回False。
 
+## 142. Linked List Cycle II(Medium)
+
+[https://leetcode-cn.com/problems/linked-list-cycle-ii/](https://leetcode-cn.com/problems/linked-list-cycle-ii/)
+
+### Description
+给定一个链表，返回链表开始入环的第一个节点。 如果链表无环，则返回 null。
+
+为了表示给定链表中的环，我们使用整数 pos 来表示链表尾连接到链表中的位置（索引从 0 开始）。 如果 pos 是 -1，则在该链表中没有环。注意，pos 仅仅是用于标识环的情况，并不会作为参数传递到函数中。
+
+### Solution
+```python
+class Solution:
+    def detectCycle(self, head: ListNode) -> ListNode:
+        if not head or not head.next:
+            return 
+        slower, faster = head, head
+        while faster and faster.next:
+            slower = slower.next
+            faster = faster.next.next
+            if slower == faster:
+                break
+        # 无环
+        if not faster or not faster.next:
+            return
+        # 有环
+        faster = head
+        while faster != slower:
+            faster, slower = faster.next, slower.next
+        return faster
+```
+思路：首先判断是否有环，使用上一题的代码。判断有环之后如何算出环的入口呢？设快指针步数f, 满指针步数为s,则有第一次相遇时：  
+f = 2s  
+f = s + nb  
+b为还上节点数，两式相减，得到第一次相遇慢指针已经走了nb步，那么他再走a步一定可以到环的入口，a为环外节点数。此时如果让一个指针从头开始和慢指针一起走a步，他们相遇时一定是在环的入口处。
 
 ## 283. Move Zeros(Easy)
 

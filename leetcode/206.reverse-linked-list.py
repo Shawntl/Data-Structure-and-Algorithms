@@ -17,9 +17,10 @@ class Solution:
         cur = head
         while cur:
             ori_next = cur.next
-            cur.next = pre 
-            pre = cur 
+            cur.next = pre
+            pre = cur
             cur = ori_next
+
         return pre
         
 # @lc code=end
