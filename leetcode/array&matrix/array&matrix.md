@@ -8,6 +8,7 @@
 * 566 Reshape the Matrix
 * 485 Max Consecutive Ones
 * 240 Search a 2D Matrix II
+* 74 Search a 2D Matrix(same as 240)
 * 378 Kth Smallest Element in a Sorted Matrix
 * 645 Set Mismatch
 * 287 Find the duplicate number

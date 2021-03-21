@@ -7,6 +7,7 @@
 
 * 88 Merge Sorted Array
 * 524 Longest Word in Dictionary through Deleting
+* 350 Intersection of two arrays II
 
 
 ## 88. Merge Sorted Array(Easy)
@@ -83,6 +84,36 @@ class Solution:
 **思路**：本题思路比较简单，两个指针一个遍历字符串，一个挨个遍历list里的字符串。记录下每个子字符串在母字符串中的长度，更新最大值，并记录当前最大值下标。注意题目要求返回字典序最小的字符串元素，所以当两个字符串对应在母字符串的最长子序列长度相等时，再进行一步字典序的比较。
 
 
+## 350.Intersection Of Two Arrays II(Easy)
+
+[https://leetcode-cn.com/problems/intersection-of-two-arrays-ii/](https://leetcode-cn.com/problems/intersection-of-two-arrays-ii/)
+
+### Description
+给定两个数组，编写一个函数来计算它们的交集。
+
+### Solution
+```python
+class Solution:
+    def intersect(self, nums1: List[int], nums2: List[int]) -> List[int]:
+        nums1.sort()
+        nums2.sort()
+        i, j = 0, 0
+        res = []
+        while i < len(nums1) and j < len(nums2):
+            if nums1[i] == nums2[j]:
+                res.append(nums1[i])
+                i += 1
+                j += 1
+            elif nums1[i] < nums2[j]:
+                i += 1
+            else:
+                j += 1
+        return res
+```
+思路：
+第一步要将两个list排序。  
+第二步初始化两个指针从两个list头部遍历，相等则添加元素，不相等时，小的元素向前移一位。   
+时间复杂度为O(max(nlogn, mlogm, m+n)),空间复杂度为O(1)。如使用hash表时间复杂度较低，空间复杂度为O(n).
 
 
 

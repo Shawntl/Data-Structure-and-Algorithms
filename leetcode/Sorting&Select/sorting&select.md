@@ -115,8 +115,45 @@ def Merge(left, right, nums):
 ```
 思路：先递归从中间切分序列成两个子序列，直到切分为两个长度为一的数组后（注意递归的终止条件），在自底向上进行合并。注意合并时每次比较出的较小的元素所放位置的索引是此时两个子序列遍历到的索引相加，即上面的i+j。
 
+## Heap Sort
 
+### Solution
+```python
+LEFT = lambda i: 2*i + 1
+RIGHT = lambda i: 2*i + 2
+ def HeapSort(nums):
+     BuildMaxHeap(nums)
+     for i in range(len(nums)-1, -1, -1):
+         nums[0], nums[i] = nums[i], nums[0]
+         # heap_size = i
+         KeepHeap(nums, 0, i)
 
+def BuildMaxHeap(nums):
+    '''
+    对现在的数组构建完全二叉树
+    '''
+    n = len(nums)
+    for i in range(len(nums)//2-1, -1, -1):
+        KeapHeap(nums, i, n)
+
+def KeepHeap(nums, i, heap_size):
+    '''
+    以当前节点i为根结点，维持一颗完全二叉树，即每个子树都是一个大顶堆
+    '''
+    l, r = LEFT(i), RIGHT(i)
+    largest = l if l < heap_size and nums[i] < nums[l] else: i
+    largest = r if r < heap_size and largest < nums[r] else: largest
+
+    if i != largest:
+        nums[i], nums[largest] = nums[largest], nums[i]
+        KeapHeap(nums, largest, heap_size)
+    return
+```
+思路：  
+第一步：创建一个完全二叉树（大顶堆）。 O(NlogN)  
+第二步：把堆顶元素放到队尾。  
+第三步：对剩下的元素再维护一个完全二叉树（大顶堆）    O(logN)   
+第四步：循环进行第2、3步
 
 
 
