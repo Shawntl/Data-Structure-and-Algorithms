@@ -5,10 +5,10 @@
  
 # 贪心算法  
 ## content
-* 874. Walking Robot Simulation  
-* 455. Assign Cookies
-* 122. Best Time to Buy and Sell Stock II
-* 55. Jump Game
+* 874.Walking Robot Simulation  
+* 455.Assign Cookies
+* 122.Best Time to Buy and Sell Stock II
+* 55.Jump Game
 
 ## 874. Walking Robot Simulation(Easy)
 

@@ -27,10 +27,10 @@
     level += 1
  ```
 
-* 102. Binary Tree Level order traversal
+* 102.Binary Tree Level order traversal
 
 ## DFS  
-* 200. Number of Island
+* 200.Number of Island
 
 
 ## 102.Binary Tree Level order traversal(Medium)

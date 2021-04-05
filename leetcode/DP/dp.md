@@ -20,30 +20,30 @@
 
 ## content
 ### 斐波那契数列(一维)
-* 70. Climbing Stairs
-* 91. Decode Ways
-* 53. Maximum Subarray
-* 152. Maximum Product Subarray
-* 322. Coin Change
+* 70.Climbing Stairs
+* 91.Decode Ways
+* 53.Maximum Subarray
+* 152.Maximum Product Subarray
+* 322.Coin Change
 
 ### 二维转一维
-* 2021. Maximum Submatrix
-* 363. Max Sum of Rectangle No larger Than K
+* 2021.Maximum Submatrix
+* 363.Max Sum of Rectangle No larger Than K
 
 
 ### 矩阵路径
-* 64. Minimum Path Sum
-* 62. Unique Paths
-* 63. Unique Paths II
-* 120. Triangle
+* 64.Minimum Path Sum
+* 62.Unique Paths
+* 63.Unique Paths II
+* 120.Triangle
 
 ### 最长公共子序列
-* 1143. Longest Common Subsequence
-* 221. Maximal Square
-* 72. Edit Distance
+* 1143.Longest Common Subsequence
+* 221.Maximal Square
+* 72.Edit Distance
 
 ### 字符串
-* 647. Palindormic Substrings
+* 647.Palindormic Substrings
 
 ## 70. Climbing Stairs(Easy)
 

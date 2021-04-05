@@ -13,6 +13,6 @@ Data Structure and Algorithms practice on leetcode with python which contains pr
 - [TwoPointers](leetcode/TwoPointers)
 - [sorting&select](leetcode/Sorting&Select/sorting&select.md)
 - [Tree&Recursion](leetcode/Tree&Recursion)
-- [search](leetcode/search.md)
-- [greedy](leetcode/gredy.md)
+- [search](leetcode/Search/search.md)
+- [greedy](leetcode/Greedy/greedy.md)
 - [DynamicProgramming](leetcode/DP)

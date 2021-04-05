@@ -3,11 +3,11 @@
 |  post | week03HW |  2021-04-05 | Shawn_Song  | leetcode
 -------
   
-* 64. Minimum Path Sum
-* 91. Decode Ways
-* 221. Maximal Square
-* 363. Max Sum of Rectangle No larger Than K
-* 647. Palindormic Substrings
+* 64.Minimum Path Sum
+* 91.Decode Ways
+* 221.Maximal Square
+* 363.Max Sum of Rectangle No larger Than K
+* 647.Palindormic Substrings
 
 
 ## 64. Minimum Path Sum(Meidum)

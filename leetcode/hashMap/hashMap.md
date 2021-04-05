@@ -7,9 +7,9 @@
 
 
 ## Content
-* 299. bulls and cows
-* 242. Valid Anagram
-* 49. Group Anagram(Medium)
+* 299.bulls and cows
+* 242.Valid Anagram
+* 49.Group Anagram(Medium)
 
 ## 299. bulls and cows(Easy)
 
