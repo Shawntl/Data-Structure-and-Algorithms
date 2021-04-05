@@ -57,3 +57,46 @@ def divide_conquer(problem, param1, param2, ...): 
 ```   
 
 3. 回溯本质是一种递归，意思就是让你在每一层去尝试不同的方法。很多时候我们需要在每层执行不同的方法时做判断进行剪枝。
+
+### 深度优先搜索和广度优先搜索
+1. 搜索不带任何智能因素，就是把所有节点遍历一遍且只遍历一次。
+2. DFS代码模版：  
+
+```python  
+#Python
+visited = set() 
+def dfs(node, visited):    
+    if node in visited: # terminator    
+        # already visited     	     return 	
+    visited.add(node) 	
+    # process current node here.
+    for next_node in node.children():
+        if next_node not in visited:
+            dfs(next_node, visited) 
+    
+```   
+3. BFS代码模版：  
+ 
+```python
+# Python
+def BFS(graph, start, end):    
+    visited = set()	
+    queue = [] 	
+    queue.append([start]) 	
+    while queue: 		
+        node = queue.pop() 	
+        visited.add(node)		
+        process(node) 		
+        nodes = generate_related_nodes(node) 
+        queue.push(nodes)	
+        # other processing work 	...
+```  
+
+### 贪心算法
+适用贪心算法的场景： 简单地说，问题能够分解成子问题来解决，子问题的最优解能递推到最终问题的最优解。这种子问题最优解称为最优子结构。  
+贪心算法与动态规划的不同在于它对每个子问题的解决方案都做出选择，不能回退。动态规划则会保存以前的运算结果，并根据以前的结果对当前进行选择，有回退功能。   
+
+###  动态规划  
+1. 分治+最优子结构。
+2. 动规和递归、分治没有本质区别，主要看是否有最优子结构。共性是是否有重复子问题。差异：最优子结构，中途可淘汰次优解。
+

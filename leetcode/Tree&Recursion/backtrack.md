@@ -12,6 +12,9 @@
 * 77.Combinations
 * 46.Permutations
 * 47.Permutations II
+* 78.Subsets
+* 17.Letter Combinations of a Phone Number
+* 51.N-Queens
 
 
 ## 22.Generate Parenthese(Medium)
@@ -126,3 +129,117 @@ class Solution:
         return res
 ```
 思路：在上一题的基础上加入减支判断条件，画递归树可以看出，当每一层递归时加入permute中的额元素重复时，应该把当前重复元素对应的分支剪除。
+
+## 78.Subsets(Medium)
+
+[https://leetcode-cn.com/problems/subsets/](https://leetcode-cn.com/problems/subsets/)
+
+### Description
+给你一个整数数组 nums ，数组中的元素 互不相同 。返回该数组所有可能的子集（幂集）。解集 不能 包含重复的子集。你可以按 任意顺序 返回解集。
+
+### Solution
+```python
+class Solution:
+    def subsets(self, nums: List[int]) -> List[List[int]]:
+        res = []
+        n = len(nums)
+        def backtrack(j, k, subsets):
+            if k == 0:
+                res.append(subsets)
+                return
+           
+            backtrack(j+1, k-1, subsets+[nums[j]])
+            backtrack(j+1, k-1, subsets+[])
+        backtrack(0, n, [])
+        return res
+```
+思路：回溯法，看成n个格子，每个格子内的元素可以选或不选。一共n层递归，每层递归执行选当前元素或者不选当前元素。
+
+## 17.Letter Combinations of a Phone Number(Meidum)
+
+[https://leetcode-cn.com/problems/letter-combinations-of-a-phone-number/](https://leetcode-cn.com/problems/letter-combinations-of-a-phone-number/)
+
+### Description
+给定一个仅包含数字 2-9 的字符串，返回所有它能表示的字母组合。答案可以按 任意顺序 返回。
+给出数字到字母的映射如下（与电话按键相同）。注意 1 不对应任何字母。
+
+### Solution
+```python
+class Solution:
+    def letterCombinations(self, digits: str) -> List[str]:
+        dig_dic = {'2': 'abc',
+                   '3': 'def',
+                   '4': 'ghi',
+                   '5': 'jkl',
+                   '6': 'mno',
+                   '7': 'pqrs',
+                   '8': 'tuv',
+                   '9': 'wxyz'}
+        res = []
+        n = len(digits)
+        if n == 0:
+            return []
+        def backtrack(dig_idx, s):
+            if dig_idx == n:
+                res.append(s)
+                return
+            key = digits[dig_idx]
+            for j in range(len(dig_dic[key])):
+                backtrack(dig_idx+1, s+dig_dic[key][j])
+        backtrack(0, '')
+        return res
+```
+思路：可以看成n个格子，n是digits长度，每层往格子中可以放k种可能的字母，k是当前数字对应的字母串的长度。下一层递归考虑往第二个格子里放第二个digits对应的字母串中的一个。
+
+
+## 51. N-Queens
+
+[https://leetcode-cn.com/problems/n-queens/](https://leetcode-cn.com/problems/n-queens/)
+
+### Description
+n 皇后问题 研究的是如何将 n 个皇后放置在 n×n 的棋盘上，并且使皇后彼此之间不能相互攻击。
+给你一个整数 n ，返回所有不同的 n 皇后问题 的解决方案。
+
+### Solution
+```python
+class Solution:
+    def solveNQueens(self, n: int) -> List[List[str]]:
+        self.result = []
+        self.cols = set()
+        self.pie = set()
+        self.na = set()
+
+        def backtrack(n, row, cur_trail):
+            if row == n:
+                self.result.append(cur_trail)
+                return
+
+            for col in range(n):
+                if (col in self.cols) or (row + col in self.pie) or (row - col in self.na):
+                    continue 
+
+                self.cols.add(col)
+                self.pie.add(row + col)
+                self.na.add(row - col)
+
+                backtrack(n, row+1, cur_trail+[col])
+
+                self.cols.remove(col)
+                self.pie.remove(row+col)
+                self.na.remove(row-col)
+        backtrack(n, 0, [])
+
+        return self._generate_result(n)
+    
+    def _generate_result(self, n):
+        board = []
+        for res in self.result:
+            for i in res:
+                board.append('.' * i + 'Q' + '.' * (n- i-1))
+
+        return [board[i:i+n] for i in range(0, len(board), n)]
+```
+思路：本题有三个关键点：   
+第一： 题目需要用回溯法来解，一共n层递归，每一层选择将皇后放在当前行的某一列（for 循环遍历当前行的所有列），进入下一层时行数加一。  
+第二： 在当前递归层决定是否放皇后时，需要判断在皇后的上一行（上一层递归）的当前列以及对角线上是否有被放过皇后。这就需要每一层递归落子时记录列和两个对角坐标，对角坐标计算方式为row+col、row-col，记住就好。  
+第三：每一层递归调用结束后都需要清除还原环境储存的变量（self.col, self.pie, self.na），以便下一轮从顶层的递归重新使用。

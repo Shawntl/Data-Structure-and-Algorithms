@@ -11,12 +11,14 @@
 * 144.binary tree preorder traversal
 * 94.binary tree inorder traversal
 * 236.Lowest Common Ancestor of a Binary Tree
+* 589.N-ary Tree Preorder Traversal
 
 ### 泛型递归、树的递归
 * 98.Validate Binary Search Tree
 * 104.Maximum Depth of Binary Tree
 * 111.Minimum Depth of Binary Tree
 * 226.Invert Binary Tree
+
 
 
 ## 144. binary tree preorder traversal(Medium)
@@ -151,18 +153,19 @@ class Solution:
 ```
 思路：递归地交换父节点的两个子节点。
 
-## 236. Lowest Common Ancestor of a Binary Tree
+## 236. Lowest Common Ancestor of a Binary Tree(Meidum)
 
 [https://leetcode-cn.com/problems/lowest-common-ancestor-of-a-binary-tree/](https://leetcode-cn.com/problems/lowest-common-ancestor-of-a-binary-tree/)
 
 ### Description
 给定一个二叉树, 找到该树中两个指定节点的最近公共祖先。
 
-### Solution
+### Solution(分治 )
 ```python
-# 终止条件
+class Solution:
+    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
+        # 终止条件
         if not root: return None
-        # 每一层递归执行的操作
         if root.val == p.val or root.val == q.val:
             return root
         # dfs+后序遍历，向下一层进行递归，分为两个子问题
@@ -181,4 +184,28 @@ class Solution:
 思路：只有两种可能：  
 1. p,q在当前节点两侧子节点。
 2. p, q在当前节点单侧子树。  
-向下递归的过程左右子树谁先匹配到p,q, 就优先递归地向上返回哪个节点。同时在一层匹配到则返回父节点。
+向下递归的过程左右子树谁先匹配到p,q, 就优先递归地向上返回哪个节点。同时在一层匹配到则返回父节点。  
+
+
+## 589.N-ary Tree Preorder Traversal(Easy)
+
+[https://leetcode-cn.com/problems/n-ary-tree-preorder-traversal/](https://leetcode-cn.com/problems/n-ary-tree-preorder-traversal/)
+
+### Description
+给定一个 N 叉树，返回其节点值的 前序遍历 。
+N 叉树 在输入中按层序遍历进行序列化表示，每组子节点由空值 null 分隔（请参见示例）。
+
+### Solution
+```python
+class Solution:
+    def preorder(self, root: 'Node') -> List[int]:
+        res = []
+        def recursivePreorder(root):
+            if not root: return
+            res.append(root.val)
+            for child in root.children:
+                recursivePreorder(child)
+        recursivePreorder(root)
+        return res
+```
+思路：和二叉树的前序遍历类似。
