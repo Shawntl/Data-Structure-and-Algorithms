@@ -16,3 +16,4 @@ Data Structure and Algorithms practice on leetcode with python which contains pr
 - [search](leetcode/Search/search.md)
 - [greedy](leetcode/Greedy/greedy.md)
 - [DynamicProgramming](leetcode/DP)
+- [BitOperator](leetcode/BitOperator/bitoperator.md)

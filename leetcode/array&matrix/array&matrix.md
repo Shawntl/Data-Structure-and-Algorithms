@@ -20,6 +20,7 @@
 * 66 Plus One
 * 189 Rotate array
 * 15 3Sum
+* 205.Isomorphic Strings
 
 
 ## 1. Two Sum(Easy)
@@ -625,6 +626,24 @@ class Solution:
 复杂度分析：
 时间复杂度 $O(N^2)$：其中固定指针k循环复杂度O(N)，双指针 i，j 复杂度 O(N)。
 空间复杂度 O(1)：指针使用常数大小的额外空间。
+
+
+## 205. Isomorphic Strings
+
+[https://leetcode-cn.com/problems/isomorphic-strings/](https://leetcode-cn.com/problems/isomorphic-strings/)
+
+### Description
+给定两个字符串 s 和 t，判断它们是否是同构的。
+如果 s 中的字符可以按某种映射关系替换得到 t ，那么这两个字符串是同构的。
+每个出现的字符都应当映射到另一个字符，同时不改变字符的顺序。不同字符不能映射到同一个字符上，相同字符只能映射到同一个字符上，字符可以映射到自己本身。
+
+### Solution
+```python
+class Solution:
+    def isIsomorphic(self, s: str, t: str) -> bool:
+        return all(s.index(s[i]) == t.index(t[i]) for i in range(len(s)))
+```
+思路：同构字符串中对应位字符的索引（该字符在字符串中第一次出现的下标）一定相等。如果没有重复出现的字符，那么索引一一对应。
 
 
 

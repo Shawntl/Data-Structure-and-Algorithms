@@ -3,6 +3,7 @@
 |  post | Sorting&select |  2021-01-03 | Shawn_Song  | leetcode
 -------
 
+### 十大排序实现
 * Brute Force Sort
 * Bubble Sort
 * Select Sort
@@ -14,6 +15,9 @@
 * Bucket Sort
 * Radix Sort
 
+### 排序题
+* 1122.Relative Sort Array
+* 56.Merge Intervals
 
 ## Brute Force Sort(Easy)
 
@@ -156,6 +160,52 @@ def KeepHeap(nums, i, heap_size):
 第四步：循环进行第2、3步
 
 
+
+## 1122. Relative sort array(Easy)
+
+[https://leetcode-cn.com/problems/relative-sort-array/submissions/](https://leetcode-cn.com/problems/relative-sort-array/submissions/)
+
+### Solution
+```python
+class Solution:
+    def relativeSortArray(self, arr1: List[int], arr2: List[int]) -> List[int]:
+        cnt = [0]*1001
+        res = []
+        for num1 in arr1:
+            cnt[num1] += 1
+        
+        for num2 in arr2:
+            res.extend([num2]*cnt[num2])
+            cnt[num2] = 0
+        
+        for i in range(1001):
+            if cnt[i] != 0:
+                res.extend([i]*cnt[i])
+        return res
+```
+思路：使用计数排序，因为两个数组的数值范围在0～1000以内。
+
+## 56. Merge Intervals(Medium)
+
+[https://leetcode-cn.com/problems/merge-intervals/](https://leetcode-cn.com/problems/merge-intervals/)
+
+### Description
+以数组 intervals 表示若干个区间的集合，其中单个区间为 intervals[i] = [starti, endi] 。请你合并所有重叠的区间，并返回一个不重叠的区间数组，该数组需恰好覆盖输入中的所有区间。
+
+### Solution
+```python
+class Solution:
+    def merge(self, intervals: List[List[int]]) -> List[List[int]]:
+        intervals.sort()
+        res = [intervals[0]]
+        for x, y in intervals[1:]:
+            if res[-1][1] < x:
+                res.append([x, y])
+            else:
+                res[-1][1] = max(y, res[-1][1])
+        return res
+```
+思路：首先想到要对数组中的元素按第一个start位排序，然后从头开始遍历，如果end小于下一个元素start则不合并，否则，将下一个元素和当前元素大的那个end赋给当前元素的end。
 
 
 

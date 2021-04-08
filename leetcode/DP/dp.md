@@ -24,6 +24,7 @@
 * 91.Decode Ways
 * 53.Maximum Subarray
 * 152.Maximum Product Subarray
+* 300.Longest Increasing Subsequence
 * 322.Coin Change
 
 ### 二维转一维
@@ -136,6 +137,28 @@ class Solution:
         return max(maxdp)
 ```
 思路：和上一题最大子序和的思路类似，唯一不同的是当前值如果为负数时有可能乘以上一个状态值的最小值达到最优。还需要维护一个储存最小值的dp数组。  
+
+## 300. Longest Increasing Subsequence(Medium)
+
+[https://leetcode-cn.com/problems/longest-increasing-subsequence/](https://leetcode-cn.com/problems/longest-increasing-subsequence/)
+
+### Description
+给你一个整数数组 nums ，找到其中最长严格递增子序列的长度。
+子序列是由数组派生而来的序列，删除（或不删除）数组中的元素而不改变其余元素的顺序。例如，[3,6,2,7] 是数组 [0,3,1,6,2,2,7] 的子序列。
+
+### Solution
+```python
+class Solution:
+    def lengthOfLIS(self, nums: List[int]) -> int:
+        if len(nums) == 1: return 1
+        dp = [1]*len(nums)
+        for i in range(1, len(nums)):
+            for j in range(i):
+                if nums[i] > nums[j]:
+                    dp[i] = max(dp[i], dp[j]+1)
+        return max(dp)
+```
+思路：这道题和最大子序和不同的地方在于子结构不能单由上一个dp[i-1]计算，而是需要遍历0~i-1的dp储存值，找到最优解。dp[i]的含义依然是以i结尾的序列中最长上升子序列。
 
 
 ## 322. Coin Change(Medium)
