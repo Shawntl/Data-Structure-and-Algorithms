@@ -26,6 +26,7 @@
 * 152.Maximum Product Subarray
 * 300.Longest Increasing Subsequence
 * 322.Coin Change
+* 198.House Robber
 
 ### 二维转一维
 * 2021.Maximum Submatrix
@@ -45,6 +46,7 @@
 
 ### 字符串
 * 647.Palindormic Substrings
+* 5.Longest Palindromic Substring
 
 ## 70. Climbing Stairs(Easy)
 
@@ -175,7 +177,7 @@ class Solution:
     def coinChange(self, coins: List[int], amount: int) -> int:
         dp = [0]+[float('inf')]*amount
         for i in range(1, amount+1):
-            for k in coins:
+            for k in coins: 
                 if k <= i:
                     dp[i] = min(dp[i], dp[i-k]+1)
         if dp[amount] == float('inf'):
@@ -184,6 +186,32 @@ class Solution:
             return dp[amount]
 ```
 思路：状态dp[i]是兑换当前amount最少硬币数，和爬楼梯问题不一样的是：爬楼梯是将几种最优子结构解相加，而这里是求最优子结构中的最小值，每一个状态保证最小，就一定可以保证最后的dp[amount]也一定是最小的。
+
+## 198. House Robber(Medium)
+
+[https://leetcode-cn.com/problems/house-robber/](https://leetcode-cn.com/problems/house-robber/)
+
+### Description
+```python
+class Solution:
+    def rob(self, nums: List[int]) -> int:
+        n = len(nums)
+        dp = [0]*n
+        if n == 1: 
+            return nums[0]
+        if n == 2: 
+            return max(nums)
+        if n == 3:
+            return max(nums[1], nums[0]+nums[2])
+        dp[0], dp[1], dp[2] = nums[0], max(nums[:2]), max(nums[1], nums[0]+nums[2])
+        for i in range(3, n):
+            dp[i] = max(dp[i-2] + nums[i], dp[i-3] + nums[i])
+        return max(dp)
+```
+思路：一维dp，每个状态代表打劫到当前房间且会打劫当前房间能获得的最大金额。状态转移方程是:  
+dp[i] = max(dp[i-2] + nums[i], dp[i-3] + nums[i]),  注意这里不光要考虑相隔一个房间的位置，还需要考虑相隔两个房间的位置，因为当你不加入邻位房间dp[i-1]的结果时，dp[i-3]的结果也被你忽略了。最后记得对边界条件做处理。
+
+
 
 ## 2021. Max submatirx LCCI(hard)
 
@@ -496,7 +524,7 @@ class Solution:
                 if length == 1:
                     dp[j][i] = True
                     count += 1
-                # 子串长度等于且两个字符一样，一定是回文
+                # 子串长度等于2且两个字符一样，一定是回文
                 if length == 2 and s[j] == s[i]:
                     dp[j][i] = True
                     count += 1
@@ -508,3 +536,36 @@ class Solution:
         return count
 ```
 思路：用一个头指针i和尾指针j定义所有子串的状态空间，每次i加一，所以注意在第三个条件判断中，length>2时，除去外层两个字符，dp[j+1][i-1]一定在之前的遍历中判断过是否为回文。
+
+
+## 5. Longest Palindromic Substring(Medium)
+
+[https://leetcode-cn.com/problems/longest-palindromic-substring/](https://leetcode-cn.com/problems/ longest-palindromic-substring/)
+
+### Description
+给你一个字符串 s，找到 s 中最长的回文子串。
+
+### Solution
+```python
+class Solution:
+    def longestPalindrome(self, s: str) -> str:
+        n = len(s)
+        dp = [[False]*n for _ in range(n)]
+        max_len = 0
+        for i in range(n):
+            for j in range(i+1):
+                length = i - j + 1
+                if length == 1:
+                    dp[i][j] = True
+                elif length == 2 and s[i] == s[j]:
+                    dp[i][j] = True
+                elif length > 2 and s[i] == s[j] and dp[i-1][j+1] == True:
+                    dp[i][j] = True
+                
+                if dp[i][j] == True and length > max_len:
+                    left, right = j, i
+                    print(left, right)
+                    max_len = length
+        return s[left:right+1]
+```
+思路：和上一题解题模版一致，本题改计数为找最大，只要更新最长回文串的前后指针下标即可。

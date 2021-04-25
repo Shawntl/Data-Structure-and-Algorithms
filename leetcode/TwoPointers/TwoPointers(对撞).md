@@ -11,6 +11,9 @@
 * 125 Valid Palindrome
 * 680 Valid Palindrome II
 * 344 Reverse String
+* 541 Reverse String II
+* 151 Reverse Words in a String
+* 11.Container With Most Water
 
 
 ## 167. Two Sum II - Input arraay is sorted(Easy)
@@ -181,7 +184,7 @@ class Solution:
 **思路**：这道题和上一道题不一样的是当前左指针value和右指针value不相等时，因为字符串没有非字符数字元素，所以此时一定有一个指针的value是多余的元素。那么如果仅有这一个多余的元素，除去这个元素后剩下的字符串(左指针往右或右指针往左)一定符合回文规则，如果不符合则多余元素不止一个，返回False。
 
 
-## Reverse String(Easy)
+## 344.Reverse String(Easy)
 
 [https://leetcode-cn.com/problems/reverse-string/](https://leetcode-cn.com/problems/reverse-string/)
 
@@ -206,8 +209,58 @@ class Solution:
 ```
 **思路**：与前面几道题一样，两个指针从两端开始交换value便可实现列表的反转。
 
+## 541. Reverse String II(Easy)
 
-## Container With Most Water(Medium)
+[https://leetcode-cn.com/problems/reverse-string-ii/](https://leetcode-cn.com/problems/reverse-string-ii/)
+
+### Description
+给定一个字符串 s 和一个整数 k，你需要对从字符串开头算起的每隔 2k 个字符的前 k 个字符进行反转。
+
+### Solution
+```python
+class Solution:
+    def reverseStr(self, s: str, k: int) -> str:
+        n = len(s)
+        ls = list(s)
+        for i in range(0, n, 2*k):
+            if n - i < k:
+                self.reverse(ls, i, n-1)
+            else:
+                self.reverse(ls, i, i+k-1)
+        return ''.join(ls)
+
+    def reverse(self, ls, start, end):
+        while start < end:
+            ls[start], ls[end] = ls[end], ls[start]
+            start+= 1
+            end -= 1
+```
+思路：利用python切片进行每隔2k一次的循环。
+
+
+## 151. Reverse Words in a String(Medium)
+
+[https://leetcode-cn.com/problems/reverse-words-in-a-string/](https://leetcode-cn.com/problems/reverse-words-in-a-string/)
+
+### Description
+给定一个字符串，逐个翻转字符串中的每个单词。
+
+### Solution
+```python
+class Solution:
+    def reverseWords(self, s: str) -> str:
+        ls = s.split(' ')
+        old_ls = [sub_s for sub_s in ls if sub_s]
+        left, right = 0, len(old_ls) - 1
+        while left < right:
+            old_ls[left], old_ls[right] = old_ls[right], old_ls[left]
+            left += 1
+            right -= 1
+        return ' '.join(old_ls)
+```
+思路：去除空格转为列表反转后再转回字符串。
+
+## 11. Container With Most Water(Medium)
 
 [https://leetcode-cn.com/problems/container-with-most-water/](https://leetcode-cn.com/problems/container-with-most-water/)
 
@@ -236,6 +289,8 @@ class Solution:
 ```
 
 **思路**：计算面积是长（横坐标）乘宽（纵坐标），首先我们可以先从长最大时开始搜索，所以想到list两端开始遍历。我们再考虑宽是两个数中较小的那一个，所以下一次遍历两端的指针一定会往中间收缩，长一定会变小，要想面积大于当前值，只有较小的那个数变的比当前大才有可能更新最大值，否则可以一直往前（后）移动指针，知道较小值大于当前值，在进行面积计算。注意指针移动过程中left == right或者 left > right的退出条件，不然会陷入死循环。
+
+
 
 
 

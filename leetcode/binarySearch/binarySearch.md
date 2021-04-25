@@ -37,10 +37,12 @@
 
 
 * 69 Sqrt(x)
+* 367.Valid Perfect Square
+* 33.Search in Rotated Sorted Array
+* 153 Find Minimum in Rotated Sorted Array
 * 744 Find Smallest Letter Greater Than Target
 * 540 Single Element in a Sorted Array
 * 278 First Bad Version
-* 153 Find Minimum in Rotated Sorted Array
 * 34 Find First and Last Position of Element in Sorted Array
 
 ## 69. Sqrt(x)(Easy)
@@ -73,6 +75,91 @@ class Solution:
 
 时间复杂度：$O(logx)$
 
+
+## 367. Valid Perfect Square(Easy)
+
+[https://leetcode-cn.com/problems/valid-perfect-square/](https://leetcode-cn.com/problems/valid-perfect-square/)
+
+### Description
+给定一个 正整数 num ，编写一个函数，如果 num 是一个完全平方数，则返回 true ，否则返回 false 。
+进阶：不要 使用任何内置的库函数，如  sqrt 。
+
+### Solution
+```python
+class Solution:
+    def isPerfectSquare(self, num: int) -> bool:
+        left, right = 0, num
+        while left <= right:
+            mid = (left+right) // 2
+            if mid**2 == num:
+                return True
+            elif mid**2 < num:
+                left = mid + 1
+            else:
+                right = mid - 1
+        return False
+```
+思路：和上一题类似。
+
+
+## 33. Search in Rotated Sorted Array(Medium)
+
+[https://leetcode-cn.com/problems/search-in-rotated-sorted-array/](https://leetcode-cn.com/problems/search-in-rotated-sorted-array/)
+
+### Solution
+```python
+class Solution:
+    def search(self, nums: List[int], target: int) -> int:
+        left, right = 0, len(nums) - 1
+        while left <= right:
+            mid = (left+right) // 2
+            if nums[mid] == target:
+                return mid
+            # 左半段有序
+            elif nums[mid] >= nums[left]:
+                if nums[left] <= target < nums[mid]:
+                    right = mid - 1
+                else:
+                    left = mid + 1
+            # 右半段有序
+            else:
+                if nums[mid] < target <= nums[right]:
+                    left = mid + 1
+                else:
+                    right = mid - 1
+        return -1
+```
+思路： 数组从任意位置劈开后，至少有一半是有序的。基于这个事实。我们可以先找到哪半段有序，然后看target在不在这一段里。如果在，那么就把另半段丢弃。如果不在，那么就把这一段丢弃。
+
+
+## 153. Find Minimum in Rotated Sorted Array(Medium)
+
+[https://leetcode-cn.com/problems/find-minimum-in-rotated-sorted-array/](https://leetcode-cn.com/problems/find-minimum-in-rotated-sorted-array/)
+
+### Description
+假设按照升序排序的数组在预先未知的某个点上进行了旋转。例如，数组 [0,1,2,4,5,6,7] 可能变为 [4,5,6,7,0,1,2] 。
+请找出其中最小的元素
+
+### Solution
+```python
+class Solution:
+    def findMin(self, nums: List[int]) -> int:
+        left, right = 0, len(nums) - 1
+        min_val = nums[0]
+        while left <= right: 
+            mid = (left+right) // 2
+            # 左半边有序，且为升序
+            if nums[mid] >= nums[left]:
+                min_val = min(nums[left], min_val)
+                left = mid + 1
+            # 右半边有序，且为升序
+            else:
+                min_val = min(nums[mid], min_val)
+                right = mid - 1
+        return min_val
+```
+
+**思路**：本题和上一题思路一致，数组从任意位置劈开后，至少有一半是有序的。基于这个事实。我们可以先找到哪半段有序，然后可以找到这一段最小值。把另半段丢弃。不断更新最小值。最后返回min_val
 
 ## 744. Find Smallest Letter Greater Than Target(Easy)
 
@@ -173,46 +260,7 @@ class Solution:
         return left
 ```
 
-**思路**：错误版本list是一个1-n的顺序列表，查找其中的第一个错误版本号。所以是一个二分查找左边界问题。这道题中left, right指针移动的判断条件函数已经给出接口，isBadVersion().我们只需要考虑左右指针的移动。因为是左边界问题，所以右指针必须移动，当mid值不是坏版本时，坏版本一定在mid右侧，左指针要向右移动。该问题下因为两个指针都在移动，left == right时的元素不一定是第一个坏版本，所以相等应该写在终止循环内，以便我们分析相等后指针移动的两种情况，确认返回值。  
-
-## 153. Find Minimum in Rotated Sorted Array(Medium)
-
-[https://leetcode-cn.com/problems/find-minimum-in-rotated-sorted-array/](https://leetcode-cn.com/problems/find-minimum-in-rotated-sorted-array/)
-
-### Description
-假设按照升序排序的数组在预先未知的某个点上进行了旋转。例如，数组 [0,1,2,4,5,6,7] 可能变为 [4,5,6,7,0,1,2] 。
-请找出其中最小的元素
-
-### Solution
-```python
-class Solution:
-    def findMin(self, nums: List[int]) -> int:
-        if len(nums) == 1:
-            return nums[0]
-        # target元素在列表两端的特殊情况
-        if (nums[0] < nums[1]) and (nums[0] < nums[-1]):
-            return nums[0]
-        if (nums[-1] < nums[-2]) and (nums[-1] < nums[0]):
-            return nums[-1]
-
-        left, right = 0, len(nums) - 1
-        while left < right:
-            mid = (left + right) // 2
-            # 找到了target元素
-            if (nums[mid] < nums[mid-1]) and (nums[mid] < nums[mid+1]):
-                return nums[mid]
-            # 找到了target元素前一个元素
-            elif (nums[mid] > nums[mid-1]) and (nums[mid] > nums[mid+1]):
-                return nums[mid + 1]
-            elif nums[mid] < nums[right]:
-                right = mid - 1
-            elif nums[mid] > nums[left]:
-                left = mid + 1
-        return
-```
-
-**思路**：列表部分有序，查找元素，可以尝试二分思路。因为列表具有旋转前后连环性质，所以我们将target元素在列表两端的情况作为特殊情况考虑。 下面的主要因素就是，计算出mid值后如何判断target元素在mid左边还是右边？ 经过观察如果mid同时小于两端的值，mid是target元素，如果mid同时大于两边的元素，mid+ 1是target元素。  
-刚才说列表部分有序，我们观察除了上述两种情形，在mid不是target值时，mid应该是右大左小。保持一种顺序的一侧一定不存在target值，即mid应该小于right大于left，对应的一侧可以被收缩掉。因为while循环里，包含了mid为target的情况和mid为target前一个元素的情况，所以在left==right之前就会找到target值，故找到后自动终止函数。   
+**思路**：错误版本list是一个1-n的顺序列表，查找其中的第一个错误版本号。所以是一个二分查找左边界问题。这道题中left, right指针移动的判断条件函数已经给出接口，isBadVersion().我们只需要考虑左右指针的移动。因为是左边界问题，所以右指针必须移动，当mid值不是坏版本时，坏版本一定在mid右侧，左指针要向右移动。该问题下因为两个指针都在移动，left == right时的元素不一定是第一个坏版本，所以相等应该写在终止循环内，以便我们分析相等后指针移动的两种情况，确认返回值。    
 
 
 ## 34. Find First and Last Position of Element in Sorted Array(Medium)

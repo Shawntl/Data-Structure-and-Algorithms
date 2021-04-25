@@ -9,7 +9,8 @@
 ## Content
 * 299.bulls and cows
 * 242.Valid Anagram
-* 49.Group Anagram(Medium)
+* 49.Group Anagram
+* 438.Find All  Anagrams in a String
 
 ## 299. bulls and cows(Easy)
 
@@ -84,7 +85,39 @@ class Solution:
 ```
 思路：首先想到创建一个字典，一个key映射一个anagram组，那么怎么表示key呢？key的特点是唯一的确定一个anagram组，所有的anagram字符频数一样只是顺序不同，但是key不能是一个可迭代的数据类型，例如字典。所以想到所有anagram按字母排序后是一样的，就以排序后的字符串作为字典的键值。
 
+## 438. Fina All Anagrams in a String(Medium)
 
+[https://leetcode-cn.com/problems/find-all-anagrams-in-a-string/](https://leetcode-cn.com/problems/find-all-anagrams-in-a-string/)
+
+### Description
+给定一个字符串 s 和一个非空字符串 p，找到 s 中所有是 p 的字母异位词的子串，返回这些子串的起始索引。
+字符串只包含小写英文字母，并且字符串 s 和 p 的长度都不超过 20100。
+
+### Solution
+```python
+class Solution:
+    def findAnagrams(self, s: str, p: str) -> List[int]:
+        n, m = len(s), len(p)
+        res = []
+        p_dict = collections.Counter(p)
+        sub_s_dict = collections.Counter(s[0:m])
+        if p_dict == sub_s_dict:
+            res.append(0)
+        for i in range(1, n-m+1):
+            if sub_s_dict[s[i-1]] > 1:
+                sub_s_dict[s[i-1]] -= 1
+            else:
+                del sub_s_dict[s[i-1]]
+            if s[i+m-1] in sub_s_dict.keys():
+                sub_s_dict[s[i+m-1]] += 1
+            else:
+                sub_s_dict[s[i+m-1]] = 1
+            if sub_s_dict == p_dict:
+                res.append(i)
+
+        return res
+```
+思路：滑动窗口，每滑动一次做一次相同异位词比对。异位词比对方法和上一题一样。每一次滑动不需要重新创建字典，只需要统计出窗口的字符和进窗口的字符计数即可。
 
 
 

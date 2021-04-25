@@ -18,6 +18,7 @@
 ### 排序题
 * 1122.Relative Sort Array
 * 56.Merge Intervals
+* 493.Reverse Pairs
 
 ## Brute Force Sort(Easy)
 
@@ -206,6 +207,61 @@ class Solution:
         return res
 ```
 思路：首先想到要对数组中的元素按第一个start位排序，然后从头开始遍历，如果end小于下一个元素start则不合并，否则，将下一个元素和当前元素大的那个end赋给当前元素的end。
+
+## 493. Reverse Pairs(Hard)
+
+[https://leetcode-cn.com/problems/reverse-pairs/submissions/](https://leetcode-cn.com/problems/reverse-pairs/submissions/)
+
+### Description
+给定一个数组 nums ，如果 i < j 且 nums[i] > 2*nums[j] 我们就将 (i, j) 称作一个重要翻转对。
+你需要返回给定数组中的重要翻转对的数量。
+
+### Solution
+```python
+class Solution:
+    def reversePairs(self, nums: List[int]) -> int:
+        return self.merge_Rpairs(nums)
+
+    def merge_Rpairs(self, nums):
+        n = len(nums)
+        if n < 2:
+            return 0
+        mid = n // 2
+        left = nums[:mid]
+        right = nums[mid:]
+        left_cnt = self.merge_Rpairs(left)
+        right_cnt = self.merge_Rpairs(right)
+        merge_cnt = self.merge(left, right, nums)
+
+        return left_cnt + right_cnt + merge_cnt
+    
+    def merge(self, left, right, nums):
+        # 合并左右两个有序数组（和归并排序一样）
+        i, j = 0, 0
+        while i < len(left) and j < len(right):
+            if left[i] <= right[j]:
+                nums[i+j] = left[i]
+                i += 1
+            else:
+                nums[i+j] = right[j]
+                j += 1
+        if i == len(left):
+            nums[i+j:] = right[j:]
+        else:
+            nums[i+j:] = left[i:]
+
+        # 计算两个有序数组之间形成的翻转对儿
+        ii = jj = 0
+        cnt = 0
+        while ii < len(left) and jj < len(right):
+            if left[ii] <= 2*right[jj]:
+                ii += 1
+            else:
+                cnt += (len(left) - ii)
+                jj += 1
+        return cnt
+```
+思路：使用归并排序的思路，在合并两个数组的函数中加入计算两个数组之间翻转对数量的操作
 
 
 

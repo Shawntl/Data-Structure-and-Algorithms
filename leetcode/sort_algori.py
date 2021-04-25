@@ -110,7 +110,7 @@ class Sort:
         i = j = 0
         while i < len(left) and j < len(right):
             if left[i] <= right[j]:
-                nums[i+j] = left[i]
+                nums[i+j] = left[i] 
                 i += 1
             else:
                 nums[i+j] = right[j]
