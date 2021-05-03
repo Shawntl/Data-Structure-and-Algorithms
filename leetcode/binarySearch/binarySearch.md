@@ -149,13 +149,18 @@ class Solution:
         while left <= right: 
             mid = (left+right) // 2
             # 左半边有序，且为升序
-            if nums[mid] >= nums[left]:
+            if nums[mid] > nums[left]:
                 min_val = min(nums[left], min_val)
                 left = mid + 1
             # 右半边有序，且为升序
-            else:
+            elif nums[mid] < nums[right]:
                 min_val = min(nums[mid], min_val)
                 right = mid - 1
+            # 说明mid和左端的值相等或者和右端的值相等，有一半变为相同的值
+            # 右指针移动一位，改变mid，继续一个个寻找
+            else:
+                min_val = min(min_val, numbers[right])
+                right -= 1
         return min_val
 ```
 

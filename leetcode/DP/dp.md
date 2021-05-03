@@ -21,23 +21,32 @@
 ## content
 ### 斐波那契数列(一维)
 * 70.Climbing Stairs
+* 746.Min Cost Climbing Stairs
 * 91.Decode Ways
 * 53.Maximum Subarray
 * 152.Maximum Product Subarray
 * 300.Longest Increasing Subsequence
 * 322.Coin Change
 * 198.House Robber
+* 213.House Robber II
 
 ### 二维转一维
 * 2021.Maximum Submatrix
 * 363.Max Sum of Rectangle No larger Than K
-
 
 ### 矩阵路径
 * 64.Minimum Path Sum
 * 62.Unique Paths
 * 63.Unique Paths II
 * 120.Triangle
+
+### 股票交易问题
+* 121.Best Time to Buy and Sell Stock
+* 122.Best Time to Buy and Sell Stock II
+* 123.Best Time to Buy and Sell Stock III
+* 188.Best Time to Buy and Sell Stock IV
+* 309.Best Time to Buy and Sell Stock with Cooldown
+* 714.Best Time to Buy and Sell Stock with Transaction Fee
 
 ### 最长公共子序列
 * 1143.Longest Common Subsequence
@@ -68,6 +77,29 @@ class Solution:
         return res
 ```
 思路：自底向上的动态规划，由递推树可以看出n<4时，res就是n自己。n>4时，res=f(n-1)+f(n-2),我们只要每一次存下下一个n的前两个res即可，前两个res我们用fst和sec来存，每一次循环更新这两个变量即可。
+
+
+## 746.Min Cost Climbing Stairs(Easy)
+
+[https://leetcode-cn.com/problems/min-cost-climbing-stairs/](https://leetcode-cn.com/problems/min-cost-climbing-stairs/)
+
+### Description
+数组的每个下标作为一个阶梯，第 i 个阶梯对应着一个非负数的体力花费值 cost[i]（下标从 0 开始）。
+每当你爬上一个阶梯你都要花费对应的体力值，一旦支付了相应的体力值，你就可以选择向上爬一个阶梯或者爬两个阶梯。请你找出达到楼层顶部的最低花费。在开始时，你可以选择从下标为 0 或 1 的元素作为初始阶梯。
+
+### Solution
+```python
+class Solution:
+    def minCostClimbingStairs(self, cost: List[int]) -> int:
+        N = len(cost)
+        # 顶层是cost最后一级台阶的上一层
+        dp = [0]*(N+1)
+        for i in range(2, N+1):
+            dp[i] = min(dp[i-1] + cost[i-1], dp[i-2] + cost[i-2])
+
+        return dp[-1]
+```
+思路：状态定义为爬上当前阶梯的最小花费，它等于到达上一级台阶最小花费加上上一级台阶自身花费和到达上上级台阶最小花费加上上上级台阶自身花费中的最小值。
 
 ## 91. Decode Ways(Meidum)
 
@@ -191,26 +223,45 @@ class Solution:
 
 [https://leetcode-cn.com/problems/house-robber/](https://leetcode-cn.com/problems/house-robber/)
 
-### Description
+### Solution
 ```python
 class Solution:
     def rob(self, nums: List[int]) -> int:
         n = len(nums)
         dp = [0]*n
-        if n == 1: 
-            return nums[0]
-        if n == 2: 
-            return max(nums)
-        if n == 3:
-            return max(nums[1], nums[0]+nums[2])
-        dp[0], dp[1], dp[2] = nums[0], max(nums[:2]), max(nums[1], nums[0]+nums[2])
-        for i in range(3, n):
-            dp[i] = max(dp[i-2] + nums[i], dp[i-3] + nums[i])
+        for i in range(n):
+            if i < 2:
+                dp[i] = max(nums[:i+1])
+            else:
+                dp[i] = max(dp[i-1], dp[i-2] + nums[i])
         return max(dp)
 ```
-思路：一维dp，每个状态代表打劫到当前房间且会打劫当前房间能获得的最大金额。状态转移方程是:  
-dp[i] = max(dp[i-2] + nums[i], dp[i-3] + nums[i]),  注意这里不光要考虑相隔一个房间的位置，还需要考虑相隔两个房间的位置，因为当你不加入邻位房间dp[i-1]的结果时，dp[i-3]的结果也被你忽略了。最后记得对边界条件做处理。
+思路：一维dp，每个状态代表打劫到当前房间可获得的最大金额（包含打劫/不打劫两种选择）。状态转移方程是:  
+dp[i] = max(dp[i-1], dp[i-2] + nums[i]),  当打劫该房间时需要考虑相隔一个房间的金额，当不打劫当前房间时，只需要考虑上一个房间的打劫金额。最后记得对边界条件（第一、二个房间）做处理。
 
+## 213. House Robber II(Medium)
+
+[https://leetcode-cn.com/problems/house-robber-ii/](https://leetcode-cn.com/problems/house-robber-ii/)
+
+### Solution
+```python
+class Solution:
+    def rob(self, nums: List[int]) -> int:
+        m = len(nums)
+        if m == 1:
+            return nums[0]
+        def rob_dp(sub_num):
+            n = len(sub_num)
+            dp = [0]*n
+            for i in range(n):
+                if i < 2:
+                    dp[i] = max(sub_num[:i+1])
+                else:
+                    dp[i] = max(dp[i-1], dp[i-2] + sub_num[i])
+            return max(dp)
+        return max(rob_dp(nums[1:]), rob_dp(nums[:m-1]))
+```
+思路：和上一题思路一样，只需要单独考虑nums[1:]和nums[:n-1]即可，因为环状结构，要么第一个房间和最后一个房间不能一起抢劫。
 
 
 ## 2021. Max submatirx LCCI(hard)
@@ -400,7 +451,232 @@ class Solution:
                     triangle[i][j] += min(triangle[i-1][j], triangle[i-1][j-1])
         return min(triangle[-1])
 ```
-思路：和在矩阵中搜索最小路径和类似。
+思路：和在矩阵中搜索最小路径和类似。  
+
+<br>
+
+## 股票交易解题题眼
+```
+每一天的状态的定义为： 到当前天为止所获得的利润。最终返回的状态就是过到最后一天的所获利润。 
+每一天的状态最优子结构都是从上一天的状态转移而来。 也可能从上几天转移。（当股票交易有冷冻期）
+每一天的状态只存在两种情况：持有股票/不持有股票。（二维状态转移）  
+当假如题目限制了最大交易次数，还需要再加入一维状态，即到当前天为止还剩余的交易次数。（三维状态转移）
+
+* 二维dp的状态转移方程：  
+当天不持有股票时，要么是上一天就不持有，要么是当天卖出了股票。
+dp[i][0] = max(dp[i-1][0], dp[i-1][1] + prices[i])
+当天持有股票时，要么是上一天就持有股票，要么是当天买入了股票。
+dp[i][1] = max(dp[i-1][1], dp[i-1][0] - prices[i])  
+
+121、122、309、714题均是上面状态转移方程的变体。下面一一说明：  
+121题：因为全程只能交易一次，当每次尝试当天买入股票时，利润都不能和之前的金额累加，因为这是一次新的且唯一一次交易机会。都需要重新计算，所以
+    dp[i][1] = max(dp[i-1][1], -prices[i]) 
+122题：全程可以交易多次，状态转移方程就是模版的方程。
+309题：全程可以交易多次，但是再次买入股票前有一天的冷冻期，当尝试当天买入股票时，应该由i-2天的状态传导而来，因为dp[i-1][0]的状态可能是i-1天卖出股票的状态，那么dp[i]是不能进行买入操作的。所以：
+    dp[i][1] = max(dp[i-1][1], dp[i-2][0]-prices[i]) 
+714题：全程可以多次交易，每次卖出股票要支付一笔手续费，所以：
+    dp[i][0] = max(dp[i-1][0], dp[i-1][1] + prices[i] + Fee)  
+
+* 三维dp的状态转移方程（123题、188题）：  
+k表示到当前天为止还剩余的交易次数，买入股票时，k-1  
+当天不持有股票时，要么是上一天就不持有，要么是当天卖出了股票。
+dp[i][k][0] = max(dp[i-1][k][0], dp[i-1][k][1] + prices[i])
+当天持有股票时，要么是上一天就持有股票，要么是当天买入了股票，那么上一天剩余的交易次数就会减一。
+dp[i][k][1] = max(dp[i-1][k][1], dp[i-1][k-1][0] - prices[i])
+
+
+最后，解题时要注意状态空间的边界条件，边界条件包括：  
+* prices数组长度小于2时
+* 因为当前天由上一天或者上两天转移而来，第一天和第二天的状态可能需要单独考虑。
+```
+## 121. Best Time to Buy and Sell Stock(Easy)
+
+[https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock/](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock/)
+
+### Description
+给定一个数组 prices ，它的第 i 个元素 prices[i] 表示一支给定股票第 i 天的价格。
+你只能选择 某一天 买入这只股票，并选择在 未来的某一个不同的日子 卖出该股票。设计一个算法来计算你所能获取的最大利润。
+返回你可以从这笔交易中获取的最大利润。如果你不能获取任何利润，返回 0。
+
+### Solution One(一次遍历)
+```python
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        earn_value = 0
+        if len(prices) < 2:
+            return earn_value
+        buy_price = prices[0]
+        for price in prices:
+            earn_value = max(price - buy_price, earn_value)
+            buy_price = min(buy_price, price)
+        return earn_value
+```
+思路：一维dp, 状态定义为当前天是否卖出股票的收益最大值，如果不卖出则收益最大值为上一天决策后的收益，如果卖出，则为当前股票价格之前天中最低股票价格。状态转移方程为dp[i] = max(dp[i] - buy_price, dp[i-1]),需要用标记法记录最小的buy_price。
+
+### Solution Two(股票交易模版)
+```python
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        dp = [[0 for _ in range(2)] for _ in range(len(prices))]
+        dp[0][0] = 0
+        dp[0][1] = -prices[0]
+        for i in range(1, len(prices)):
+            dp[i][0] = max(dp[i-1][0], dp[i-1][1]+prices[i])
+            dp[i][1] = max(dp[i-1][1], -prices[i])
+        return dp[-1][0]
+```
+
+
+## 122. Best Time to Buy and Sell Stock II(Easy)
+
+[https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-ii/](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-ii/)
+
+### Description
+给定一个数组 prices ，其中 prices[i] 是一支给定股票第 i 天的价格。
+设计一个算法来计算你所能获取的最大利润。你可以尽可能地完成更多的交易（多次买卖一支股票）。
+注意：你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。
+
+### Solution One(Greedy)
+```python
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        if len(prices) < 2:
+            return 0
+        max_value, pre = 0, prices[0]
+        for price in prices[1:]:
+            if price > pre:
+                earn_value = price - pre
+            else:
+                earn_value = 0
+            pre = price
+            max_value += earn_value  
+        return max_value
+```
+思路：这道题我使用的应该算是贪心算法，因为可以多次交易，每次只要保证本次交易的最大化就可以保证整体最优。即只要当前价格比昨天高就卖出，如果比昨天价格低就买入。max_value用来统计所有收益。
+
+### Solution Two(DP, 股票交易模版)
+```python
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        dp = [[0 for _ in range(2)] for _ in range(len(prices))]
+        dp[0][0] = 0
+        dp[0][1] = -prices[0]
+        for i in range(1, len(prices)):
+            dp[i][0] = max(dp[i-1][0], dp[i-1][1]+prices[i])
+            dp[i][1] = max(dp[i-1][1], dp[i-1][0]-prices[i])
+        return dp[-1][0]
+```
+思路：和上一题唯一不同的是第二个状态转移方程，需要累加之前积累的财富，因为可以多次交易进行获利，而不是只能一次交易。
+
+## 123.Best Time to Buy and Sell Stock III(Hard)
+
+[https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-iii/](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-iii/)
+
+### Description
+给定一个数组，它的第 i 个元素是一支给定的股票在第 i 天的价格。设计一个算法来计算你所能获取的最大利润。你最多可以完成 两笔 交易。
+注意：你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。
+
+### Solution
+```python
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        N = len(prices)
+        K = 2
+        # 边界条件，如果k已经用完或者第一天不持有股票, 状态就应当是0,没有任何现金流
+        dp = [[[0]*2 for _ in range(K+1)] for _ in range(N)]
+        # 第一天就持有股票，并且k>0,一定是第一天就买入了
+        for k in range(1, K+1):
+            dp[0][k][1] = -prices[0]
+        # 当k已经用完了，是不可以交易的，持有股票的情况视为异常
+        for i in range(N):
+            dp[i][0][1] = -inf
+        # 从第二天并且k>0开始遍历
+        for i in range(1, N):
+            for k in range(2, 0, -1):
+                dp[i][k][0] = max(dp[i-1][k][0], dp[i-1][k][1] + prices[i])
+                dp[i][k][1] = max(dp[i-1][k][1], dp[i-1][k-1][0] - prices[i])
+        return dp[-1][-1][0]
+```
+思路：与上一题思路相似，这里因为限制了交易次数，所以加入一维状态k，k代表当前还剩余的交易次数。
+
+
+## 188.Best Time to Buy and Sell Stock IV(Hard)
+
+[https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-iv/](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-iv/)
+
+### Solution
+```python
+class Solution:
+    def maxProfit(self, k: int, prices: List[int]) -> int:
+        N = len(prices)
+        if N == 0:
+            return 0
+        dp = [[[0]*2 for _ in range(k+1)] for _ in range(N)]
+        for i in range(N):
+            dp[i][0][1] = -inf
+        for j in range(1, k+1):
+            dp[0][j][1] = -prices[0]
+        for i in range(1, N):
+            for j in range(k, 0, -1):
+                dp[i][j][0] = max(dp[i-1][j][0], dp[i-1][j][1] + prices[i])
+                dp[i][j][1] = max(dp[i-1][j][1], dp[i-1][j-1][0] - prices[i])
+        return dp[-1][-1][0]
+```
+思路：和上一题类似。交易最大次数换成了变量。
+
+
+## 309.Best Time to Buy and Sell Stock with Cooldown(Medium)
+
+[https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/)
+
+### Description
+给定一个整数数组，其中第 i 个元素代表了第 i 天的股票价格 。​
+设计一个算法计算出最大利润。在满足以下约束条件下，你可以尽可能地完成更多的交易（多次买卖一支股票）:
+你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。
+卖出股票后，你无法在第二天买入股票 (即冷冻期为 1 天)。
+
+### Solution
+```python
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        N = len(prices)
+        if N <= 1: return 0
+        dp = [[0]*2 for _ in range(N)]
+        dp[0][0] = 0
+        dp[0][1] = -prices[0]
+        dp[1][0] = max(dp[0][0], prices[1] - prices[0])
+        dp[1][1] = max(dp[0][1], -prices[1])
+        for i in range(2, N):
+            dp[i][0] = max(dp[i-1][0], dp[i-1][1] + prices[i])
+            dp[i][1] = max(dp[i-1][1], dp[i-2][0] - prices[i])
+        return dp[-1][0]
+```
+思路： 309题在122题基础上加了一个限制条件，即买入操作前一天为冷冻期，不能买入。所以dp[i][1]的状态来源有所不同，第一种来源是上一天就持有股票这个不变，即dp[i-1][1], 第二种来源如果没有冷冻期即上一天不持有股票的情况下当前天买入，即dp[i-1][0] - prices[i]. 但是现在由于当前天如果要买入，上一天一定不能进行卖出操作，所以状态传导应该由dp[i-2][0]来进行，因为这样无论dp[i-2][0]不持有股票是由于本来就不持有还是i-2天卖出操作，都不会影响dp[i]的买入操作。
+
+## 714.Best Time to Buy and Sell Stock with Transaction Fee(Medium)
+
+[https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-with-transaction-fee/](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-with-transaction-fee/)
+
+### Description
+给定一个整数数组 prices，其中第 i 个元素代表了第 i 天的股票价格 ；非负整数 fee 代表了交易股票的手续费用。
+你可以无限次地完成交易，但是你每笔交易都需要付手续费。如果你已经购买了一个股票，在卖出它之前你就不能再继续购买股票了。
+返回获得利润的最大值。
+
+### Solution
+```python
+class Solution:
+    def maxProfit(self, prices: List[int], fee: int) -> int:
+        N = len(prices)
+        if N <= 1: return 0
+        dp = [[0]*2 for _ in range(N)]
+        dp[0][0] = 0
+        dp[0][1] = -prices[0]
+        for i in range(1, N):
+            dp[i][0] = max(dp[i-1][0], dp[i-1][1] + prices[i] - fee)
+            dp[i][1] = max(dp[i-1][1], dp[i-1][0] - prices[i])
+        return dp[-1][0]
+```
+思路：本题与第309题类似，都是在122题上的基础上加入了限制条件。本题在每笔交易加入了手续费，只要在卖出股票当天减去手续费即可。
 
 
 ## 1143. Longest Common Subsequence(Medium)
@@ -488,13 +764,14 @@ class Solution:
                 elif i == 0 and j != 0:
                     dp[i][j] = dp[i][j-1]+1
                 else:
+                    # 如果尾部字符相匹配
                     if word1[i-1] == word2[j-1]:
                         dp[i][j] = dp[i-1][j-1]
                     else:
                         dp[i][j] = min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1])+1
         return dp[i][j]
 ```
-思路：将两个字符串比对转化为矩阵路径问题，横轴纵轴分别代表一个字符串，格子内的值代表两个字符串从头对齐到当前位置需要的最小操作数。下面来它的子问题是从上一个最小操作数状态转换到当前状态，因为有三种操作，所以当最后一步操作是：   
+思路：将两个字符串比对转化为矩阵路径问题，横轴纵轴分别代表一个字符串，i, j分别代表两个字符串从头开始已经匹配上的字符数，格子内的值代表两个字符串从头对齐到当前位置匹配上需要的最小操作数。下面来它的子问题是从上一个最小操作数状态转换到当前状态，因为有三种操作，所以当最后一步操作是：   
 插入：考虑dp[i][j-1]  
 删除：考虑dp[i-1][j]   
 替换：考虑dp[i-1][j-1]  

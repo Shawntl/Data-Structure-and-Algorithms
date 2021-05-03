@@ -15,6 +15,7 @@
 * 78.Subsets
 * 17.Letter Combinations of a Phone Number
 * 51.N-Queens
+* 79.Word Search
 
 
 ## 22.Generate Parenthese(Medium)
@@ -243,3 +244,43 @@ class Solution:
 第一： 题目需要用回溯法来解，一共n层递归，每一层选择将皇后放在当前行的某一列（for 循环遍历当前行的所有列），进入下一层时行数加一。  
 第二： 在当前递归层决定是否放皇后时，需要判断在皇后的上一行（上一层递归）的当前列以及对角线上是否有被放过皇后。这就需要每一层递归落子时记录列和两个对角坐标，对角坐标计算方式为row+col、row-col，记住就好。  
 第三：每一层递归调用结束后都需要清除还原环境储存的变量（self.col, self.pie, self.na），以便下一轮从顶层的递归重新使用。
+
+
+## 79.Word Search(Medium)
+
+[https://leetcode-cn.com/problems/word-search/](https://leetcode-cn.com/problems/word-search/)
+
+### Description
+给定一个 m x n 二维字符网格 board 和一个字符串单词 word 。如果 word 存在于网格中，返回 true ；否则，返回 false 。
+单词必须按照字母顺序，通过相邻的单元格内的字母构成，其中“相邻”单元格是那些水平相邻或垂直相邻的单元格。同一个单元格内的字母不允许被重复使用。
+
+
+### Solution
+```python
+class Solution:
+    def exist(self, board: List[List[str]], word: str) -> bool:
+        n, m = len(board), len(board[0])
+        # 回溯法判断当前位置字母是否为单词对应位置的字母
+        def backtrack(i, j, k):
+            # 当前位置字母不是单词对应位置的字母
+            if not 0<=i<n or not 0<=j<m or board[i][j] != word[k]:
+                return False
+            # 当前位置字母是单词对应位置的字母
+
+            # 当前字母已经遍历到单词的最后一个字母
+            if k == len(word) - 1:
+                return True
+            # 将当前位置的字母置为空，意为已经标记为遍历过
+            board[i][j] = ''
+            # 向周围相邻的位置做探索递归
+            res = backtrack(i-1, j, k+1) or backtrack(i, j-1, k+1) or backtrack(i+1, j, k+1) or backtrack(i, j+1, k+1)  
+            # 回溯过后恢复数组中原本的元素值
+            board[i][j] = word[k]
+            return res
+        # 在矩阵中搜索单词的第一个字母
+        for i in range(n):
+            for j in range(m):
+                if backtrack(i, j, 0):
+                    return True
+        return False
+```

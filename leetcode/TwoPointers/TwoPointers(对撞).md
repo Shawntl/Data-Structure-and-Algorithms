@@ -12,6 +12,7 @@
 * 680 Valid Palindrome II
 * 344 Reverse String
 * 541 Reverse String II
+* 917 Reverse Only Letters
 * 151 Reverse Words in a String
 * 11.Container With Most Water
 
@@ -237,6 +238,35 @@ class Solution:
 ```
 思路：利用python切片进行每隔2k一次的循环。
 
+## 917. Reverse Only Letters(Easy)
+
+[https://leetcode-cn.com/problems/reverse-only-letters/](https://leetcode-cn.com/problems/reverse-only-letters/)
+
+### Description
+给定一个字符串 S，返回 “反转后的” 字符串，其中不是字母的字符都保留在原地，而所有字母的位置发生反转。
+
+### Solution
+```python
+class Solution:
+    def reverseOnlyLetters(self, S: str) -> str:
+        if not S: return S
+        left, right = 0, len(S) - 1
+        S_l = list(S)
+        while left <= right:
+            if S_l[left].isalpha() and S_l[right].isalpha():
+                S_l[left], S_l[right] = S_l[right], S_l[left]
+                left += 1
+                right -= 1
+            elif S_l[left].isalpha():
+                right -= 1
+            elif S_l[right].isalpha():
+                left += 1
+            else:
+                left += 1
+                right -= 1
+        return ''.join(S_l)
+```
+思路：头尾对撞指针，遇到字母交换，遇到非字母向前/向后移动。
 
 ## 151. Reverse Words in a String(Medium)
 
