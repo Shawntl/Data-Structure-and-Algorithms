@@ -23,6 +23,7 @@
 * 70.Climbing Stairs
 * 746.Min Cost Climbing Stairs
 * 91.Decode Ways
+* 343.Integer Break
 * 53.Maximum Subarray
 * 152.Maximum Product Subarray
 * 300.Longest Increasing Subsequence
@@ -129,6 +130,25 @@ class Solution:
 只有当当前字符不为零（即可解码）时才可以加前一个字符的所有解码方法数。  
 当当前字符和上一个字符可以组成10～26的解码时，才可以加上倒数第二个字符的解码方法数。
 
+
+## 343.Integer Break(Medium)
+
+[https://leetcode-cn.com/problems/integer-break/](https://leetcode-cn.com/problems/integer-break/)
+
+### Description
+给定一个正整数 n，将其拆分为至少两个正整数的和，并使这些整数的乘积最大化。 返回你可以获得的最大乘积。
+
+### Solution
+```python
+class Solution:
+    def integerBreak(self, n: int) -> int:
+        dp = [0]*(n+1)
+        for i in range(2, n+1):
+            for j in range(1, i):
+                dp[i] = max(dp[i], j*(i-j), j*dp[i-j])
+        return dp[-1]
+```
+思路：dp[i]定义为大小为i的整数通过拆分，可以获得的最大乘积。它一定由上一次拆分而转移来，设上一次拆分大小为j，剩下的（i-j）可以拆也可以不拆。如果不拆乘积为j*(i-j);如果拆乘积为j*dp[i-j].取两者最大值。
 
 ## 53. Maximum Subarray(Medium)
 
