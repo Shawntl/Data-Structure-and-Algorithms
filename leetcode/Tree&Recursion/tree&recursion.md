@@ -18,6 +18,7 @@
 * 104.Maximum Depth of Binary Tree
 * 111.Minimum Depth of Binary Tree
 * 226.Invert Binary Tree
+* 101.Symmetric Tree
 
 
 
@@ -209,3 +210,24 @@ class Solution:
         return res
 ```
 思路：和二叉树的前序遍历类似。
+
+## 101.Symmetric Tree(Easy)
+
+[https://leetcode-cn.com/problems/symmetric-tree/](https://leetcode-cn.com/problems/symmetric-tree/)
+
+### Description
+给定一个二叉树，检查它是否是镜像对称的。
+
+### Solution
+```python
+class Solution:
+    def isSymmetric(self, root: TreeNode) -> bool:
+        if not root: return True
+        def helper(left, right):
+            if not left and not right: return True
+            if not left or not right: return False
+            return left.val == right.val and helper(left.right, right.left) and helper(left.left, right.right)
+
+        return helper(root.left, root.right)
+```
+思路：镜像对称的条件是，对称子树（left, right）的根节点值相等。(注意这里left和right不是一个根节点的左右子树）。left子树的右节点和right子树的左节点判断相等，left子树的左节点和right子树的右节点判断相等。

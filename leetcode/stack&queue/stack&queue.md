@@ -12,6 +12,7 @@
 * 155.Min stack
 * 239.Sliding Window Maximum
 * 1021.Remove Outermost Parentheses
+* 946.Validate Stack Sequences
 
 ## 20. valid parentheses(Easy)
 
@@ -218,6 +219,31 @@ class Solution:
         return res
 ```
 思路：题意是将字符串拆成几个能用()包起来的子字符串，然后把外面的（）去掉返回。创建一个栈，两两配对，两个if stack,判断就是考虑最外层的（）不加入返回值。
+
+
+## 946.Validate Stack Sequences(Medium)
+
+[https://leetcode-cn.com/problems/validate-stack-sequences/](https://leetcode-cn.com/problems/validate-stack-sequences/)
+
+### Solution
+```python
+class Solution:
+    def validateStackSequences(self, pushed: List[int], popped: List[int]) -> bool:
+        if not pushed or not popped: return True
+        stack = []
+        for i in range(len(pushed)):
+            stack.append(pushed[i])
+            while stack and stack[-1] == popped[0] and popped:
+                popped.pop(0)
+                stack.pop()
+        if popped:
+            return False
+        return True
+```
+思路：
+1. 初始化一个空栈。  
+2. 将pushed中元素一个个入栈，当入栈元素等于popped第一个元素时，循环出栈，并删除popped第一个元素，直到stack栈顶元素不等于popped第一个元素。再继续入栈。
+3. 如果popped被删空说明为True。
 
 
 
