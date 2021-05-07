@@ -20,6 +20,7 @@
 * 234 Palindrome Linked List(Recap 125、680 in 对撞双指针)
 * 725 Split Linked List in Parts
 * 328 Odd Even Linked List
+* 138.Copy List with Random Pointer
 
 ## 160. Intersection of Two Linked Lists(Easy)
 
@@ -391,6 +392,30 @@ class Solution:
 
 **思路**：设置两个指针，一个去把奇数位串起来，一个去把偶数位串起来。然后把第一位偶数节点放到最后一位奇数节点后。
 
+## 138.Copy List with Random Pointer(Medium)
+
+[https://leetcode-cn.com/problems/copy-list-with-random-pointer/](https://leetcode-cn.com/problems/copy-list-with-random-pointer/)
+
+### Solution
+```python
+class Solution:
+    def copyRandomList(self, head: 'Node') -> 'Node':
+        if not head: return head
+        dic = {}
+        cur = head
+        # 建立老链表和新链表的节点 map
+        while cur:
+            dic[cur] = Node(cur.val)
+            cur = cur.next
+        p = head
+        # 复制索引
+        while p:
+            dic[p].next = dic.get(p.next)
+            dic[p].random = dic.get(p.random)
+            p = p.next
+        return dic[head]
+```
+思路： 利用字典复制链表节点。
 
 
 

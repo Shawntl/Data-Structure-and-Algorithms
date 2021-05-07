@@ -16,6 +16,7 @@
 * 17.Letter Combinations of a Phone Number
 * 51.N-Queens
 * 79.Word Search
+* 113.Path Sum II
 
 
 ## 22.Generate Parenthese(Medium)
@@ -284,3 +285,26 @@ class Solution:
                     return True
         return False
 ```
+
+## 113. Path Sum II(Medium)
+
+[https://leetcode-cn.com/problems/path-sum-ii/](https://leetcode-cn.com/problems/path-sum-ii/)
+
+### Solution
+```python
+class Solution:
+    def pathSum(self, root: TreeNode, targetSum: int) -> List[List[int]]:
+        res = []
+        def backtrack(root,node_lst,target):
+            if not root: return
+            if not root.left and not root.right and (target-root.val) == 0:
+                node_lst.append(root.val)
+                res.append(node_lst)
+            
+            backtrack(root.left,node_lst + [root.val], target - root.val)
+            backtrack(root.right,node_lst + [root.val], target - root.val)
+            
+        backtrack(root, [], targetSum)
+        return res
+```
+思路：回溯遍历所有路径，检查是否符合要求。

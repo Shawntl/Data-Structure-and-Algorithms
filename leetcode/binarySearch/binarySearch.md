@@ -44,6 +44,7 @@
 * 540 Single Element in a Sorted Array
 * 278 First Bad Version
 * 34 Find First and Last Position of Element in Sorted Array
+* 169.Majority-element
 
 ## 69. Sqrt(x)(Easy)
 
@@ -311,6 +312,17 @@ class Solution:
 ```
 
 **思路**： 分别寻找target元素在数组中的上边界和下边界，注意target元素不在列表中的几种特殊情况。
+
+## 169.Majority Element(Easy)
+
+[https://leetcode-cn.com/problems/majority-element/](https://leetcode-cn.com/problems/majority-element/)
+
+### Solution
+```python
+class Solution:
+    def majorityElement(self, nums: List[int]) -> int:
+        return sorted(nums)[(len(nums)-1) // 2]
+```
 
 
 
