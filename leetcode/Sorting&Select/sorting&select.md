@@ -20,6 +20,9 @@
 * 56.Merge Intervals
 * 493.Reverse Pairs
 
+### 堆
+* 295.Find Median From Data Stream
+
 ## Brute Force Sort(Easy)
 
 ### Solution
@@ -263,6 +266,40 @@ class Solution:
 ```
 思路：使用归并排序的思路，在合并两个数组的函数中加入计算两个数组之间翻转对数量的操作
 
+
+##  295.Find Median From Data Stream(Hard)
+
+[https://leetcode-cn.com/problems/find-median-from-data-stream/](https://leetcode-cn.com/problems/find-median-from-data-stream/)
+
+### Solution
+```python
+class MedianFinder:
+
+    def __init__(self):
+        """
+        initialize your data structure here.
+        """
+        self.A = []
+        self.B = []
+
+    def addNum(self, num: int) -> None:
+        # 插入后为偶数个元素
+        if len(self.A) != len(self.B):
+            heappush(self.A, num)
+            heappush(self.B, -heappop(self.A))
+        # 插入后为奇数个元素
+        else:
+            heappush(self.B, -num)
+            heappush(self.A, -heappop(self.B))
+
+    def findMedian(self) -> float:
+        return self.A[0] if len(self.B) != len(self.A) 
+```
+思路：维护一个小顶堆存较大的一半元素，维护一个大顶堆存较小的一半元素。如果总的元素数量是N，  
+当N为偶数时，小顶堆元素个数为N/2,  大顶堆的元素为N/2。   
+当N为奇数时，小顶堆的元素个数为(N+1)/2, 大顶堆的元素个数为(N-1)/2.  
+当插入后为偶数个元素：最后插入的堆应该为大顶堆，因为大顶堆的元素数量在插入前就比小顶堆小。  
+当插入后为奇数个元素：最后插入的堆应该为小顶堆。
 
 
 

@@ -26,6 +26,7 @@
 * 343.Integer Break
 * 53.Maximum Subarray
 * 152.Maximum Product Subarray
+* 3.Longest Substring Without Repeating Characters
 * 300.Longest Increasing Subsequence
 * 322.Coin Change
 * 198.House Robber
@@ -191,6 +192,38 @@ class Solution:
         return max(maxdp)
 ```
 思路：和上一题最大子序和的思路类似，唯一不同的是当前值如果为负数时有可能乘以上一个状态值的最小值达到最优。还需要维护一个储存最小值的dp数组。  
+
+
+## 3.Longest Substring Without Repeating Characters(Medium)
+
+[https://leetcode-cn.com/problems/longest-substring-without-repeating-characters/](https://leetcode-cn.com/problems/longest-substring-without-repeating-characters/)
+
+### Description
+给定一个字符串，请你找出其中不含有重复字符的 最长子串 的长度。
+
+### Solution
+```python
+class Solution:
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        if not s: return 0
+        N = len(s)
+        dp = [0]*N
+        str_lst = [s[0]]
+        if N == 1: return 1
+        dp[0] = 1
+        for i in range(1, N):
+            if s[i] in str_lst:
+                dp[i] = len(str_lst) - str_lst.index(s[i])
+                str_lst = str_lst[str_lst.index(s[i])+1:]+[s[i]]
+            else:
+                dp[i] = dp[i-1] + 1
+                str_lst.append(s[i])
+        return max(dp)
+```
+思路：想到用动态规划，状态定义为到当前字符为止且用到当前字符的最长不重复字串的长度。用一个list保存之前的最长不重复字符串。
+当s[i]出现在list中时，dp[i] = 当前list长度 - 上一个s[i]在list中出现的位置索引，然后更新list。  
+当s[i]未出现在list中时，dp[i] = dp[i-1] + 1, 更新list。
+
 
 ## 300. Longest Increasing Subsequence(Medium)
 
