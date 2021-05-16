@@ -303,7 +303,7 @@ class Solution:
                 right2 = mid - 1
         end = right2
         # target大于列表中最大值，或者小于列表中最小值时
-        if start > (len(nums)-1) or end < 0:
+        if start > (len(nums)-1) or end < 0: 
             return [-1, -1]
         elif nums[start] == nums[end] == target:
             return [start, end]

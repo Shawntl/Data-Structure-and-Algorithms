@@ -19,6 +19,7 @@
 * 111.Minimum Depth of Binary Tree
 * 226.Invert Binary Tree
 * 101.Symmetric Tree
+* 110.Balanced Binary Tree
 
 
 
@@ -231,3 +232,26 @@ class Solution:
         return helper(root.left, root.right)
 ```
 思路：镜像对称的条件是，对称子树（left, right）的根节点值相等。(注意这里left和right不是一个根节点的左右子树）。left子树的右节点和right子树的左节点判断相等，left子树的左节点和right子树的右节点判断相等。
+
+## 110.Balanced Binary Tree(Easy)
+
+[https://leetcode-cn.com/problems/balanced-binary-tree/](https://leetcode-cn.com/problems/balanced-binary-tree/)
+
+### Description
+给定一个二叉树，判断它是否是高度平衡的二叉树。
+本题中，一棵高度平衡二叉树定义为：
+一个二叉树每个节点 的左右两个子树的高度差的绝对值不超过 1 。
+
+### Solution
+```python
+class Solution:
+    def isBalanced(self, root: TreeNode) -> bool:
+        if not root: return True
+        def depth(root):
+            if not root: return 0
+            return max(depth(root.right), depth(root.left)) + 1
+        if abs(depth(root.right) - depth(root.left)) > 1:
+            return False
+        return self.isBalanced(root.right) and self.isBalanced(root.left)
+```
+思路：递归的判断左右子树是否为深度相差一，求左右子树的深度又是一次递归的求解。两层递归。
