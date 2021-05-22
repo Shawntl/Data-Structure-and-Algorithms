@@ -188,11 +188,14 @@ class Solution:
     def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:
         deque, res = [], []
         for i in range(len(nums)):
+            # 保证队列中加入的是最大值索引,降序
             while deque and nums[i] > nums[deque[-1]]:
                 deque.pop()
             deque.append(i)
+            # 当窗口内最大值作用范围大于窗口长度
             if i - deque[0] > k-1:
                 deque.pop(0)
+            # 加入每次窗口中的最大值
             if i >= k-1:
                 res.append(nums[deque[0]])
         return res
