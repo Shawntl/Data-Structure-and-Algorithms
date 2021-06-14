@@ -21,6 +21,7 @@
 * 189 Rotate array
 * 15 3Sum
 * 205.Isomorphic Strings
+* 118.Pascal's Triangle
 
 
 ## 1. Two Sum(Easy)
@@ -646,6 +647,23 @@ class Solution:
 思路：同构字符串中对应位字符的索引（该字符在字符串中第一次出现的下标）一定相等。如果没有重复出现的字符，那么索引一一对应。
 
 
+## 118.Pascal's Triangle(Easy)
+
+[https://leetcode-cn.com/problems/pascals-triangle/](https://leetcode-cn.com/problems/pascals-triangle/)
+
+### Solution
+```python
+class Solution:
+    def generate(self, numRows: int) -> List[List[int]]:
+        ret = []
+        for i in range(1, numRows + 1):
+            tmp = [1]*i
+            for j in range(1, len(tmp) - 1):
+                tmp[j] = ret[i-2][j-1] + ret[i-2][j]
+            ret.append(tmp)
+        return ret
+```
+思路：每一行第一个数和最后一个数和上一行相同都是1，所以初始化每一行都为1，更新中间数通过上一行递推，当前元素tmp[j] = 上一行相同位置元素 + 上一行相同位置元素的前一个元素。
 
 
 
