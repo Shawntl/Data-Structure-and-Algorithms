@@ -124,7 +124,9 @@ class Solution:
 
 ### Solution
 ```python
-dummy = ListNode()
+class Solution:
+    def reverseBetween(self, head: ListNode, left: int, right: int) -> ListNode:
+        dummy = ListNode()
         dummy.next = head
         pre, cur = dummy, head
         for _ in range(1, left):
