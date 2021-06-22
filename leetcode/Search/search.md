@@ -28,6 +28,8 @@
  ```
 
 * 102.Binary Tree Level order traversal
+* 199.Binary Tree Right Side View
+* 103.Binary Tree Zigzag Level Order Traversal
 
 ## DFS  
 * 200.Number of Island
@@ -84,6 +86,73 @@ class Solution:
                 res.append(level)
         return res
 ```
+
+## 199.Binary Tree Right Side View(Medium)
+
+[https://leetcode-cn.com/problems/binary-tree-right-side-view/](https://leetcode-cn.com/problems/binary-tree-right-side-view/)
+
+### Description
+给定一棵二叉树，想象自己站在它的右侧，按照从顶部到底部的顺序，返回从右侧所能看到的节点值。
+
+### Solution
+```python
+class Solution:
+    def rightSideView(self, root: TreeNode) -> List[int]:
+        if not root: return []
+        queue = collections.deque()
+        queue.append(root)
+        res = []
+        while queue:
+            size = len(queue)
+            level = []
+            while size:
+                size -= 1
+                cur = queue.popleft()
+                if not cur:
+                    continue
+                level.append(cur.val)
+                queue.append(cur.left)
+                queue.append(cur.right)
+            if level:
+                res.append(level[-1])
+        return res
+```
+思路：层序遍历，取每层最后的值。
+
+## 103.Binary Tree Zigzag Level Order Traversal(Medium)
+
+[https://leetcode-cn.com/problems/binary-tree-zigzag-level-order-traversal/](https://leetcode-cn.com/problems/binary-tree-zigzag-level-order-traversal/)
+
+### Solution
+```python
+class Solution:
+    def zigzagLevelOrder(self, root: TreeNode) -> List[List[int]]:
+        # write code here
+        if not root: return []
+        res = []
+        queue = collections.deque()
+        queue.append(root)
+        while queue:
+            size = len(queue)
+            level = []
+            while size:
+                cur = queue.popleft()
+                size -= 1
+                if not cur:
+                    continue
+                level.append(cur.val)
+        
+                queue.append(cur.left)
+                queue.append(cur.right)
+                
+            if level:
+                res.append(level)
+        for i in range(1, len(res), 2):
+            res[i] = res[i][::-1]
+            
+        return res
+```
+思路：正常层序遍历完，再把偶数层反转。
 
 ## 200. Number of Island(Medium)
 

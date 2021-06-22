@@ -45,6 +45,7 @@
 * 278 First Bad Version
 * 34 Find First and Last Position of Element in Sorted Array
 * 169.Majority-element
+* 374.Guess Number Higer or Lower
 
 ## 69. Sqrt(x)(Easy)
 
@@ -324,6 +325,25 @@ class Solution:
         return sorted(nums)[(len(nums)-1) // 2]
 ```
 
+
+## 374.Guess Number Higer or Lower(Easy)
+
+[https://leetcode-cn.com/problems/guess-number-higher-or-lower/](https://leetcode-cn.com/problems/guess-number-higher-or-lower/)
+
+### Solution
+```python
+class Solution:
+    def guessNumber(self, n: int) -> int:
+        left, right = 1, n
+        while left <= right:
+            mid = (left+right) // 2
+            if guess(mid) == -1:
+                right = mid - 1
+            elif guess(mid) == 1:
+                left = mid + 1
+            else:
+                return mid
+```
 
 
 

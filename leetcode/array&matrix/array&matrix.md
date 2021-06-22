@@ -19,7 +19,6 @@
 * 769 Max Chunks To Make Sorted
 * 66 Plus One
 * 189 Rotate array
-* 15 3Sum
 * 205.Isomorphic Strings
 * 118.Pascal's Triangle
 
@@ -585,48 +584,6 @@ class Solution:
 2. 反转前k个元素。
 3. 反转后n-k个元素。
 
-
-## 15. 3Sum(Medium)
-
-[https://leetcode-cn.com/problems/3sum/](https://leetcode-cn.com/problems/3sum/)
-
-### Solution
-```python
-class Solution:
-    def threeSum(self, nums: List[int]) -> List[List[int]]:
-        nums.sort()
-        k, res = 0, []
-        for k in range(len(nums)-2):
-            if nums[k] > 0: break
-            if k > 0 and nums[k] == nums[k-1]: continue
-            i, j = k+1, len(nums) - 1
-            while i < j:
-                s = nums[k] + nums[i] + nums[j]
-                if s < 0:
-                    i += 1
-                    while i < j and nums[i] == nums[i-1]: i += 1
-                elif s > 0:
-                    j -= 1
-                    while i < j and nums[j] == nums[j+1]: j -= 1
-                else:
-                    res.append([nums[k], nums[i], nums[j]])
-                    i += 1
-                    j -= 1
-                    while i < j and nums[i] == nums[i-1]: i += 1
-                    while i < j and nums[j] == nums[j+1]: j -= 1
-        return res
-```
-思路：**双指针法思路**： 固定 3 个指针中最左（最小）数字的指针 k，双指针 i，j 分设在数组索引 (k, len(nums))两端，通过双指针交替向中间移动，记录对于每个固定指针 k 的所有满足 nums[k] + nums[i] + nums[j] == 0 的 i,j 组合：
-1. 当 nums[k] > 0 时直接break跳出：因为 nums[j] >= nums[i] >= nums[k] > 0，即3个数字都大于0 ，在此固定指针 k 之后不可能再找到结果了。
-2. 当 k > 0且nums[k] == nums[k - 1]时即跳过此元素nums[k]：因为已经将 nums[k - 1] 的所有组合加入到结果中，本次双指针搜索只会得到重复组合。
-3. i，j 分设在数组索引 (k, len(nums))两端，当i < j时循环计算s = nums[k] + nums[i] + nums[j]，并按照以下规则执行双指针移动：
-当s < 0时，i += 1并跳过所有重复的nums[i]；
-当s > 0时，j -= 1并跳过所有重复的nums[j]；
-当s == 0时，记录组合[k, i, j]至res，执行i += 1和j -= 1并跳过所有重复的nums[i]和nums[j]，防止记录到重复组合。
-
-复杂度分析：
-时间复杂度 $O(N^2)$：其中固定指针k循环复杂度O(N)，双指针 i，j 复杂度 O(N)。
-空间复杂度 O(1)：指针使用常数大小的额外空间。
 
 
 ## 205. Isomorphic Strings

@@ -162,7 +162,7 @@ class Solution:
 ### Description
 给定一个二叉树, 找到该树中两个指定节点的最近公共祖先。
 
-### Solution(分治 )
+### Solution(分治)
 ```python
 class Solution:
     def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':

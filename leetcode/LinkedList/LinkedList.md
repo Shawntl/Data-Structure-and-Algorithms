@@ -11,8 +11,16 @@
 
 ## Content
 * 160 Intersectionof Two Linked Lists(Recap 141)
-* 206 Reverse Linked List
+## 链表反转
+* 206.Reverse Linked List
+* 92.Reverse Linked List II
+* 25.Reverse Nodes in k-Group
+
+## 链表排序
+* 148 Sort List
 * 21 Merge Two Sorted Lists
+* 23 Merge k Sorted Lists
+
 * 83 Remove Duplicates from Sorted List(Recap 26、80)
 * 19 Remove Nth Node From End of List
 * 24 Swap Nodes in Pairs
@@ -110,6 +118,106 @@ class Solution:
 1. 将当前节点下一个节点的next指针指向自己。
 2. 将当前指针的next指针指向空，这样上一层递归函数可以返回值，并且执行反转操作。
 
+## 92.Reverse Linked List II(Medium)
+
+[https://leetcode-cn.com/problems/reverse-linked-list-ii/](https://leetcode-cn.com/problems/reverse-linked-list-ii/)
+
+### Solution
+```python
+dummy = ListNode()
+        dummy.next = head
+        pre, cur = dummy, head
+        for _ in range(1, left):
+            pre = cur
+            cur = cur.next
+
+        first, last = pre, cur
+        for _ in range(left, right + 1):
+            ori_next = cur.next
+            cur.next = pre
+            pre = cur
+            cur = ori_next
+            
+        first.next = pre
+        last.next = cur
+        return dummy.next
+```
+思路：首先找到反转起点left，在进行链表反转。
+
+
+## 25.Reverse Nodes in k-Group(Hard)
+
+[https://leetcode-cn.com/problems/reverse-nodes-in-k-group/](https://leetcode-cn.com/problems/reverse-nodes-in-k-group/)
+
+### Solution
+```python
+class Solution:
+    def reverseKGroup(self, head: ListNode, k: int) -> ListNode:
+        dummy = ListNode()
+        dummy.next = head
+        left, right = dummy, head
+        cnt = 0
+        while right:
+            cnt += 1
+            right = right.next
+            if cnt % k == 0:
+                # reverse 函数中的left是需要反转链表头节点的前一个节点
+                # right是需要反转链表尾节点的后一个节点
+                left = self.reverse(left, right)
+        return dummy.next
+
+    def reverse(self, left, right):
+        pre, cur = left, left.next
+        first, last = pre, cur
+        while cur != right:
+            ori_next = cur.next
+            cur.next = pre
+            pre = cur
+            cur = ori_next
+        first.next = pre
+        last.next = right
+        return last
+```
+
+## 148 Sort List(Medium)
+
+[https://leetcode-cn.com/problems/sort-list/](https://leetcode-cn.com/problems/sort-list/)
+
+### Description
+给你链表的头结点 head ，请将其按 升序 排列并返回 排序后的链表 。
+
+### Solution
+```python
+class Solution:
+    def sortList(self, head: ListNode) -> ListNode:
+        if not head or not head.next: return head
+        slower = head
+        faster = head.next
+        while faster and faster.next:
+            slower = slower.next
+            faster = faster.next.next
+        mid = slower.next
+        slower.next = None
+        left = self.sortList(head)
+        right = self.sortList(mid)
+            
+        return self.mergeList(left, right)
+    
+    def mergeList(self, left, right):
+        dummy = ListNode(0)
+        p = dummy
+        while left and right:
+            if left.val < right.val:
+                p.next = left
+                left = left.next
+            else:
+                p.next = right
+                right = right.next
+            p = p.next
+        p.next = left if left else right
+        return dummy.next
+```
+思路：归并排序的思想。
 
 ## 21. Merge Two Sorted Lists(Easy)
 
@@ -141,6 +249,49 @@ class Solution:
 ```
 
 **思路**：创建一个新的头指针，然后遍历两个链表，依次把小的元素所在的链表接入创建的指针。边界情况一个是其中一个链表为空，另一个情况是两个链表长度不一，一个链表会优先遍历完，直接把另一个链表接到最后即可。
+
+## 23. Merge k Sorted Lists(Hard)
+
+[https://leetcode-cn.com/problems/merge-k-sorted-lists/](https://leetcode-cn.com/problems/merge-k-sorted-lists/)
+
+### Description
+给你一个链表数组，每个链表都已经按升序排列。
+请你将所有链表合并到一个升序链表中，返回合并后的链表。
+
+### Solution
+```python
+class Solution:
+    def mergeKLists(self , lists ):
+        # write code here
+        n = len(lists)
+        if n == 0: return None
+        if n == 1: return lists[0]
+        mid = n // 2
+        left = lists[:mid]
+        right = lists[mid:]
+        left_linked = self.mergeKLists(left)
+        right_linked = self.mergeKLists(right)
+
+        return self.mergeTwoLists(left_linked, right_linked)
+        
+    def mergeTwoLists(self, p1, p2):
+        if not p1: return p2
+        if not p2: return p1
+        p = ListNode(0)
+        dummy = p
+        while p1 and p2:
+            if p1.val < p2.val:
+                p.next = p1
+                p1 = p1.next
+                p = p.next
+            else:
+                p.next = p2
+                p2 = p2.next
+                p = p.next
+        p.next = p1 if p1 else p2
+        return dummy.next
+```
+思路：归并排序思路，将k个链表向下分治为合并两个链表合并排序的子问题，再向上合并。
 
 
 ## 83. Remove Duplicates from Sorted List(Easy)
@@ -200,7 +351,7 @@ class Solution:
 
 **思路**：题目中要求遍历一遍来求解，我自然而然就想到利用空间换时间，利用字典把遍历过程中每个节点的下标储存起来，遍历过后用O(1)的时间找到需要删除的元素。
 
-### Solution Two(双指针 划窗)
+### Solution Two(双指针 快慢)
 ```python
 class Solution:
     def removeNthFromEnd(self, head: ListNode, n: int) -> ListNode:

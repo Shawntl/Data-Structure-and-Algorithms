@@ -5,7 +5,8 @@
 
 # 双指针（对撞指针）
 
-* 167 Two Sum II - Input arraay is sorted
+* 167 Two Sum II - Input array is sorted
+* 15.3Sum
 * 633 Sum of Square Numbers
 * 345 Reverse Vowels of a String
 * 125 Valid Palindrome
@@ -15,6 +16,7 @@
 * 917 Reverse Only Letters
 * 151 Reverse Words in a String
 * 11.Container With Most Water
+* 42.Trapping Rain Water
 
 
 ## 167. Two Sum II - Input arraay is sorted(Easy)
@@ -57,6 +59,48 @@ class Solution:
 **思路**：利用有序数组的这一特性，因为是查找两个元素并且有相关性，不好用二分法。首先我们分析一下这道题如何一步步想到用双指针求解： 看到题第一反应是暴力求解，从第一个元素挨个双重遍历计算是否等于target，但因为是有序数组，当选定第一个元素后，挨个比较n次和后面的元素之和才能扔掉一个元素。如果利用两个指针从两端遍历，因为数组有序，如果大于target值只需要右端移动一位，这是当前操作能执行的最小的缩小值，如果小于target值，只需要左端移动一位。这样每比较一次就可以扔掉一个元素，很好的利用了有序数组这个特性。这种方法的时间复杂度也是$O(N)$.   
 那么本题中两种方法的时间复杂度在一个数量级上，怎么比较呢。个人认为应该分情况讨论，当target值偏大时，方法二比较能快速的找到target，当target值偏小时，方法一比较能快速的找到target.实际应用时要分析数据的总体情况计算平均时间复杂度。
 
+
+## 15. 3Sum(Medium)
+
+[https://leetcode-cn.com/problems/3sum/](https://leetcode-cn.com/problems/3sum/)
+
+### Solution
+```python
+class Solution:
+    def threeSum(self, nums: List[int]) -> List[List[int]]:
+        nums.sort()
+        res = []
+        for k in range(len(nums)-2):
+            if nums[k] > 0: break
+            if k > 0 and nums[k] == nums[k-1]: continue
+            i, j = k+1, len(nums) - 1
+            while i < j:
+                s = nums[k] + nums[i] + nums[j]
+                if s < 0:
+                    i += 1
+                    while i < j and nums[i] == nums[i-1]: i += 1
+                elif s > 0:
+                    j -= 1
+                    while i < j and nums[j] == nums[j+1]: j -= 1
+                else:
+                    res.append([nums[k], nums[i], nums[j]])
+                    i += 1
+                    j -= 1
+                    while i < j and nums[i] == nums[i-1]: i += 1
+                    while i < j and nums[j] == nums[j+1]: j -= 1
+        return res
+```
+思路：**双指针法思路**： 固定 3 个指针中最左（最小）数字的指针 k，双指针 i，j 分设在数组索引 (k, len(nums))两端，通过双指针交替向中间移动，记录对于每个固定指针 k 的所有满足 nums[k] + nums[i] + nums[j] == 0 的 i,j 组合：
+1. 当 nums[k] > 0 时直接break跳出：因为 nums[j] >= nums[i] >= nums[k] > 0，即3个数字都大于0 ，在此固定指针 k 之后不可能再找到结果了。
+2. 当 k > 0且nums[k] == nums[k - 1]时即跳过此元素nums[k]：因为已经将 nums[k - 1] 的所有组合加入到结果中，本次双指针搜索只会得到重复组合。
+3. i，j 分设在数组索引 (k, len(nums))两端，当i < j时循环计算s = nums[k] + nums[i] + nums[j]，并按照以下规则执行双指针移动：
+当s < 0时，i += 1并跳过所有重复的nums[i]；
+当s > 0时，j -= 1并跳过所有重复的nums[j]；
+当s == 0时，记录组合[k, i, j]至res，执行i += 1和j -= 1并跳过所有重复的nums[i]和nums[j]，防止记录到重复组合。
+
+复杂度分析：
+时间复杂度 $O(N^2)$：其中固定指针k循环复杂度O(N)，双指针 i，j 复杂度 O(N)。
+空间复杂度 O(1)：指针使用常数大小的额外空间。
 
 ## 633. Sum of Square Numbers(Medium)
 
@@ -321,6 +365,35 @@ class Solution:
 **思路**：计算面积是长（横坐标）乘宽（纵坐标），首先我们可以先从长最大时开始搜索，所以想到list两端开始遍历。我们再考虑宽是两个数中较小的那一个，所以下一次遍历两端的指针一定会往中间收缩，长一定会变小，要想面积大于当前值，只有较小的那个数变的比当前大才有可能更新最大值，否则可以一直往前（后）移动指针，知道较小值大于当前值，在进行面积计算。注意指针移动过程中left == right或者 left > right的退出条件，不然会陷入死循环。
 
 
+## 42.Trapping Rain Water(Hard)
+
+[https://leetcode-cn.com/problems/trapping-rain-water/](https://leetcode-cn.com/problems/trapping-rain-water/)
+
+
+### Solution
+```python
+class Solution:
+    def trap(self, height: List[int]) -> int:
+        if not height: return 0
+        n = len(height)
+        left, right = 0, n - 1
+        maxleft, maxright = height[0], height[n-1]
+        res = 0
+        while left <= right:
+            maxleft = max(maxleft, height[left])
+            maxright = max(maxright, height[right])
+            if maxleft < maxright:
+                res += maxleft - height[left]
+                left += 1
+            else:
+                res += maxright - height[right]
+                right -= 1
+            
+        return res
+```
+思路：我们遍历每个下标，寻找它左边和右边最高的柱子，两边最高柱子的较小值与当前下标柱子的高度差即为当前柱子可接的水，将可接水的结果累加即可。
+双指针法就是将上边的一个下标 i，变为两个下标 left，right，分别位于输入数组的两端。向中间移动时，边移动边计算。
+除此之外，我们使用 maxleft 作为 0...left 的最高的柱子，maxright 作为 right...结尾 的最高的柱子。
 
 
 

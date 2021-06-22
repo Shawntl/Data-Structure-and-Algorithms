@@ -3,7 +3,7 @@
 |  post | Sorting&select |  2021-01-03 | Shawn_Song  | leetcode
 -------
 
-### 十大排序实现
+## 十大排序实现
 * Brute Force Sort
 * Bubble Sort
 * Select Sort
@@ -15,10 +15,77 @@
 * Bucket Sort
 * Radix Sort
 
-### 排序题
+## 排序题
 * 1122.Relative Sort Array
 * 56.Merge Intervals
 * 493.Reverse Pairs
+## 基于快排的所有TopK问题简单python模版
+### Partition 函数
+返回pivot元素最终在数组中的位置
+```python
+def partition(nums, left, right):
+    b = right
+    right = b - 1
+    pivot = nums[b]
+    while left <= right:
+        while left <= right and nums[left] < pivot:
+            left += 1
+        while left <= right and nums[right] > pivot:
+            right -= 1
+        if left <= right:
+            nums[right], nums[left] = nums[left], nums[right]
+            left, right = left + 1, right - 1
+    nums[b], nums[left] = nums[left], nums[b]
+    return left
+```
+
+### 快速排序
+```python
+def quick_sort(nums, left, right):
+    if left < right:
+        p = self.partition(nums, left, right)
+        self.quick_sort(nums, left, p-1)
+        self.quick_sort(nums, p+1, right)
+```
+
+### topk切分
+将快速排序改为快速选择，即我们希望寻找一个位置，这个位置左边是k个比这个位置上的数更小的数，右边是n-k个比改位置上的数更大的数，我们将它命名为topk_split，找到这个位置后停止迭代，完成了一次划分。
+```python
+def topk_split(nums, k, left, right):
+    if left < right:
+        index = partition(nums, left, right)
+        if index == k:
+            return
+        elif index < k:
+            topk_split(nums, k, index+1, right)
+        else:
+            topk_split(nums, k left, index-1)
+```
+接下来就依赖于上面这两个函数解决所有topk问题
+### 获得前k小的数
+```python
+def topk_small(nums, k):
+    topk_split(nums, k, 0, len(nums)-1)
+    return nums[:k]
+```
+
+### 获取第k大的数
+```python
+def topk_large(nums, k):
+    #parttion是按从小到大划分的，如果让index左边为前n-k个小的数，则index右边为前k个大的数
+    topk_split(nums, len(nums)-k, 0, len(nums)-1) #把k换成len(nums)-k
+    return nums[len(nums)-k] 
+```
+
+### 只排序前k个小的数
+```python
+def topk_sort_left(nums, k):
+    topk_split(nums, len(nums)-k, 0, len(nums)-1) 
+    topk = nums[len(nums)-k:]
+    quicksort(topk, 0, len(topk)-1)
+    return nums[:len(nums)-k]+topk #只排序后k个数字
+```
+* 215.Kth Largest Element in an Array
 
 ### 堆
 * 295.Find Median From Data Stream
@@ -265,6 +332,23 @@ class Solution:
         return cnt
 ```
 思路：使用归并排序的思路，在合并两个数组的函数中加入计算两个数组之间翻转对数量的操作
+
+
+## 215.Kth Largest Element in an Array(Medium)
+
+[https://leetcode-cn.com/problems/kth-largest-element-in-an-array/](https://leetcode-cn.com/problems/kth-largest-element-in-an-array/)
+
+### Solution One(Heap)
+```python
+class Solution:
+    def findKthLargest(self, nums: List[int], k: int) -> int:
+        heap = []
+        for num in nums:
+            heapq.heappush(heap, num)
+            if len(heap) > k:
+                heapq.heappop(heap)
+        return heap[0]
+```
 
 
 ##  295.Find Median From Data Stream(Hard)
