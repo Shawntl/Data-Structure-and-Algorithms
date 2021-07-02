@@ -31,6 +31,7 @@
 * 322.Coin Change
 * 198.House Robber
 * 213.House Robber II
+* 983.Minimum Cost for tickets
 
 ### 二维转一维
 * 2021.Maximum Submatrix
@@ -58,6 +59,7 @@
 ### 字符串
 * 647.Palindormic Substrings
 * 5.Longest Palindromic Substring
+* [5. 最长回文子串](#5-最长回文子串medium)
 
 ## 70. Climbing Stairs(Easy)
 
@@ -315,6 +317,31 @@ class Solution:
         return max(rob_dp(nums[1:]), rob_dp(nums[:m-1]))
 ```
 思路：和上一题思路一样，只需要单独考虑nums[1:]和nums[:n-1]即可，因为环状结构，要么第一个房间和最后一个房间不能一起抢劫。
+
+
+## 983.Minimum Cost for tickets(Medium)
+
+[https://leetcode-cn.com/problems/minimum-cost-for-tickets/](https://leetcode-cn.com/problems/minimum-cost-for-tickets/)
+
+### Solution
+```python
+class Solution:
+    def mincostTickets(self, days: List[int], costs: List[int]) -> int:
+        dp = [0]*(days[-1]+1)
+        days_idx = 0
+        for i in range(1, len(dp)):
+            # 若当前天数不是待处理天数，则其花费费用和前一天相同
+            if i != days[days_idx]:
+                dp[i] = dp[i-1]
+            else:
+                # 若 i 走到了待处理天数，则从三种方式中选一个最小的
+                dp[i] = min(dp[max(0, i - 1)] + costs[0], 
+                            dp[max(0, i - 7)] + costs[1],
+                            dp[max(0, i - 30)] + costs[2])
+                days_idx += 1
+        return dp[-1]
+```
+思路：对于本题不难想到应该用一个数组存储到当前某一天需要花费的最少费用，这里为了下标和天数对应，dp数组的长度选择 days 中最后一个天数多加 1 个长度，因为开始没有费用，所以初始化为 0 ，之后开始对 dp 数组进行更新，那么每到达一个位置首先考虑当前天数是否在days 中，如果不在那花费的费用肯定和它前一天花费的最少费用相同(这里用一个 idx 指标指示应该处理哪一个天数，这样就不必用 if i in days 这样的语句判断天数是否需要处理了，可以让程序快一些)，如果在的话，我们就要从三种购买方式中选择一种花费费用最少的，即你想到达第 i 天，你需要从 i 的前1或7或30天的后一位置花费对应cost[0]、cost[1]、cost[2]的钱才能到第 i 天。
 
 
 ## 2021. Max submatirx LCCI(hard)
@@ -868,7 +895,7 @@ class Solution:
 思路：用一个头指针i和尾指针j定义所有子串的状态空间，每次i加一，所以注意在第三个条件判断中，length>2时，除去外层两个字符，dp[j+1][i-1]一定在之前的遍历中判断过是否为回文。
 
 
-## 5. Longest Palindromic Substring(Medium)
+## 5. 最长回文子串(Medium)
 
 [https://leetcode-cn.com/problems/longest-palindromic-substring/](https://leetcode-cn.com/problems/ longest-palindromic-substring/)
 

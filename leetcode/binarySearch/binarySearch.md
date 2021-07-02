@@ -46,6 +46,7 @@
 * 34 Find First and Last Position of Element in Sorted Array
 * 169.Majority-element
 * 374.Guess Number Higer or Lower
+* 4.Median of Two Sorted Arrays
 
 ## 69. Sqrt(x)(Easy)
 
@@ -346,7 +347,50 @@ class Solution:
 ```
 
 
+## 4.Median of Two Sorted Arrays(Hard)
 
+
+[https://leetcode-cn.com/problems/median-of-two-sorted-arrays/](https://leetcode-cn.com/problems/median-of-two-sorted-arrays/)
+
+
+### Description
+给定两个大小分别为 m 和 n 的正序（从小到大）数组 nums1 和 nums2。请你找出并返回这两个正序数组的 中位数 。
+
+### Solution
+```python
+class Solution:
+    def findMedianSortedArrays(self, nums1: List[int], nums2: List[int]) -> float:
+        n = len(nums1) + len(nums2)
+        def get_kth_element(k):
+            # 两个数组左端下标初始化
+            i1, i2 = 0, 0
+            while k != 0:
+                 # 边界情况，当index1越界时，直接返回nums2的第k小元素
+                if i1 == len(nums1):
+                    return nums2[i2 + k - 1]
+                # 边界情况，当index2越界时，直接返回nums1的第k小元素
+                if i2 == len(nums2):
+                    return nums1[i1 + k - 1]
+                if k == 1:
+                    return min(nums1[i1], nums2[i2])
+                mid1 = min(i1 + k // 2 - 1, len(nums1) - 1)
+                mid2 = min(i2 + k // 2 - 1, len(nums2) - 1)
+
+                # 删去两段中小的较小的一段
+                if nums1[mid1] <= nums2[mid2]:
+                    
+                    k -= (mid1 - i1 + 1)
+                    i1 = mid1 + 1
+                else:
+                    k -= (mid2 - i2 + 1)
+                    i2 = mid2 + 1
+
+        if n % 2 == 1:
+            return get_kth_element((n // 2) + 1)
+        else:
+            return (get_kth_element(n // 2) + get_kth_element((n // 2) + 1)) / 2.0
+```
+思路：二分法，每次找两个正序数组k // 2 下标的值比较大小，根据结果删除其中一个数组的一半，k为合并两数组后总长度的一半。
 
 
 

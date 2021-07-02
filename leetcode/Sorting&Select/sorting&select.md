@@ -89,6 +89,7 @@ def topk_sort_left(nums, k):
 
 ### 堆
 * 295.Find Median From Data Stream
+* [347. 前K个高频元素](#347-前k个高频元素medium)
 
 ## Brute Force Sort(Easy)
 
@@ -385,6 +386,24 @@ class MedianFinder:
 当插入后为偶数个元素：最后插入的堆应该为大顶堆，因为大顶堆的元素数量在插入前就比小顶堆小。  
 当插入后为奇数个元素：最后插入的堆应该为小顶堆。
 
+## 347. 前K个高频元素(Medium)
 
+[https://leetcode-cn.com/problems/top-k-frequent-elements/](https://leetcode-cn.com/problems/top-k-frequent-elements/)
+
+### Description
+给你一个整数数组 nums 和一个整数 k ，请你返回其中出现频率前 k 高的元素。你可以按 任意顺序 返回答案。
+
+### Solution
+```python
+class Solution:
+    def topKFrequent(self, nums: List[int], k: int) -> List[int]:
+        dic  =  collections.Counter(nums)
+        h, res = [], []
+        for key, val in dic.items():
+            heapq.heappush(h, (-val, key))
+        for _ in range(k):
+            res.append(heapq.heappop(h)[1])
+        return res
+```
 
 

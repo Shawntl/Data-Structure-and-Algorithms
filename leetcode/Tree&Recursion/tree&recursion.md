@@ -10,6 +10,7 @@
 ### 深度优先遍历
 * 144.binary tree preorder traversal
 * 94.binary tree inorder traversal
+* [235. 二叉搜索树的最近公共祖先](#235-二叉搜索树的最近公共祖先easy)
 * 236.Lowest Common Ancestor of a Binary Tree
 * 589.N-ary Tree Preorder Traversal
 
@@ -154,6 +155,24 @@ class Solution:
         return root
 ```
 思路：递归地交换父节点的两个子节点。
+
+## 235. 二叉搜索树的最近公共祖先(Easy)
+
+[https://leetcode-cn.com/problems/lowest-common-ancestor-of-a-binary-search-tree/](https://leetcode-cn.com/problems/lowest-common-ancestor-of-a-binary-search-tree/)
+
+### Description
+给定一个二叉搜索树, 找到该树中两个指定节点的最近公共祖先。
+
+### Solution
+```python
+class Solution:
+    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
+        if root.val < p.val and root.val < q.val:
+            return self.lowestCommonAncestor(root.right, p, q)
+        if root.val > p.val and root.val > q.val:
+            return self.lowestCommonAncestor(root.left, p, q)
+        return root
+```
 
 ## 236. Lowest Common Ancestor of a Binary Tree(Meidum)
 

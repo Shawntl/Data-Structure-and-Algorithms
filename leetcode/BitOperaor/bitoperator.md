@@ -5,6 +5,7 @@
  
 # 位运算
 ## content
+* [136. 只出现一次的数字](#136-只出现一次的数字easy)
 * 190.Reverse Bits
 * 191.Number of 1 Bits
 * 231.Power of Two
@@ -12,6 +13,24 @@
 * 547.Number of Provinces
 * 260.Single Number III
 
+
+## 136. 只出现一次的数字(Easy)
+
+[https://leetcode-cn.com/problems/single-number/](https://leetcode-cn.com/problems/single-number/)
+
+### Description
+给定一个非空整数数组，除了某个元素只出现一次以外，其余每个元素均出现两次。找出那个只出现了一次的元素。
+
+### Solution
+```python
+class Solution:
+    def singleNumber(self, nums: List[int]) -> int:
+        res = nums[0]
+        for i in range(1, len(nums)):
+            res ^= nums[i]
+        return res
+```
+思路：
 
 ## 190. Reverse Bits(Easy)
 

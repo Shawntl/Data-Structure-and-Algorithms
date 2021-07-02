@@ -6,17 +6,20 @@
 # 双指针（对撞指针）
 
 * 167 Two Sum II - Input array is sorted
-* 15.3Sum
+* [15. 三数之和](#15-三数之和medium)
+* [16. 最接近的三数之和](#16-最接近的三数之和medium)
 * 633 Sum of Square Numbers
 * 345 Reverse Vowels of a String
 * 125 Valid Palindrome
 * 680 Valid Palindrome II
+* 336 Palindrome Pairs
 * 344 Reverse String
 * 541 Reverse String II
 * 917 Reverse Only Letters
 * 151 Reverse Words in a String
 * 11.Container With Most Water
 * 42.Trapping Rain Water
+
 
 
 ## 167. Two Sum II - Input arraay is sorted(Easy)
@@ -60,7 +63,7 @@ class Solution:
 那么本题中两种方法的时间复杂度在一个数量级上，怎么比较呢。个人认为应该分情况讨论，当target值偏大时，方法二比较能快速的找到target，当target值偏小时，方法一比较能快速的找到target.实际应用时要分析数据的总体情况计算平均时间复杂度。
 
 
-## 15. 3Sum(Medium)
+## 15. 三数之和(Medium)
 
 [https://leetcode-cn.com/problems/3sum/](https://leetcode-cn.com/problems/3sum/)
 
@@ -101,6 +104,40 @@ class Solution:
 复杂度分析：
 时间复杂度 $O(N^2)$：其中固定指针k循环复杂度O(N)，双指针 i，j 复杂度 O(N)。
 空间复杂度 O(1)：指针使用常数大小的额外空间。
+
+
+## 16. 最接近的三数之和(Medium)
+
+[https://leetcode-cn.com/problems/3sum-closest/](https://leetcode-cn.com/problems/3sum-closest/)
+
+### Description
+给定一个包括 n 个整数的数组 nums 和 一个目标值 target。找出 nums 中的三个整数，使得它们的和与 target 最接近。返回这三个数的和。假定每组输入只存在唯一答案
+
+### Solution
+```python
+class Solution:
+    def threeSumClosest(self, nums: List[int], target: int) -> int:
+        nums.sort()
+        min_dis = float('inf')
+        for k in range(len(nums) - 2):
+            if k > 0 and nums[k] == nums[k-1]: continue
+            i, j = k + 1, len(nums) - 1
+            while i < j:
+                s = nums[k] + nums[i] + nums[j]
+                if s > target:
+                    j -= 1
+                    while i < j and nums[j] == nums[j+1]: j -= 1
+                elif s < target:
+                    i += 1
+                    while i < j and nums[i] == nums[i-1]: i += 1
+                else:
+                    return target
+                if abs(s - target) < min_dis:
+                    res = s
+                    min_dis = abs(s - target)
+        return res
+```
+思路：和上一题15题类似。
 
 ## 633. Sum of Square Numbers(Medium)
 
@@ -227,6 +264,43 @@ class Solution:
 ```
 
 **思路**：这道题和上一道题不一样的是当前左指针value和右指针value不相等时，因为字符串没有非字符数字元素，所以此时一定有一个指针的value是多余的元素。那么如果仅有这一个多余的元素，除去这个元素后剩下的字符串(左指针往右或右指针往左)一定符合回文规则，如果不符合则多余元素不止一个，返回False。
+
+
+## 336.Palindrome Pairs(Hard)
+
+[https://leetcode-cn.com/problems/palindrome-pairs/](https://leetcode-cn.com/problems/palindrome-pairs/)
+
+### Description
+给定一组 互不相同 的单词， 找出所有 不同 的索引对 (i, j)，使得列表中的两个单词， words[i] + words[j] ，可拼接成回文串。
+
+### Solution
+```python
+class Solution:
+    def palindromePairs(self, words: List[str]) -> List[List[int]]:
+        res = []
+        worddict = {word: i for i, word in enumerate(words)} 
+        for i, word in enumerate(words):
+            for j in range(len(word)+1): 
+                # 这里+1是因为，列表切片是前闭后开区间
+                prefix = word[:j]  # 字符串的前缀
+                postfix = word[j:]  # 字符串的后缀
+                if prefix[::-1] in worddict and worddict[prefix[::-1]] != i and postfix == postfix[::-1]:
+            # 当word的前缀在字典中，且不是word自身，且word剩下部分是回文(空也是回文)
+            # 则说明存在能与word组成回文的字符串
+                    res.append([i, worddict[prefix[::-1]]])
+                if j > 0 and postfix[::-1] in worddict and worddict[postfix[::-1]] != i and prefix == prefix[::-1]:         
+            # 当word的后缀在字典中，且不是word自身，且word剩下部分是回文(空也是回文)
+            # 则说明存在能与word组成回文的字符串
+            # 一个单词当j==0 和 j == len(word)，整个单词计算了两次，所以算后缀时j > 0
+                    res.append([worddict[postfix[::-1]], i])
+        return res
+```
+思路：核心思想--枚举前缀和后缀  
+如果两个字符串k1，k2组成一个回文字符串会出现三种情况：  
+1. len(k1) == len(k2),则需要比较k1 == k2[::-1]
+2. len(k1) < len(k2),例如，k1=a, k2=abb,可组成abba，因为k2后缀bb已经是回文字符串了，则需要找k1与k2剩下相等的部分  
+3. len(k1) > len(k2),例如，k1=bba, k2=a,组成abba， 因为k1前缀bb已经是回文字符串了，则需要找k1剩下与k2相等的部分
+
 
 
 ## 344.Reverse String(Easy)

@@ -19,9 +19,10 @@
 ## 链表排序
 * 148 Sort List
 * 21 Merge Two Sorted Lists
-* 23 Merge k Sorted Lists
+* 23.Merge k Sorted Lists(Hard)
 
 * 83 Remove Duplicates from Sorted List(Recap 26、80)
+* [82. 删除排序链表中的重复元素II](#82删除排序链表中的重复元素IImedium)
 * 19 Remove Nth Node From End of List
 * 24 Swap Nodes in Pairs
 * 445 Add Two  Numbers II
@@ -29,6 +30,7 @@
 * 725 Split Linked List in Parts
 * 328 Odd Even Linked List
 * 138.Copy List with Random Pointer
+* [2. 两数相加](#2-两数相加medium)
 
 ## 160. Intersection of Two Linked Lists(Easy)
 
@@ -117,6 +119,7 @@ class Solution:
 **思路**：递归的方法稍微有一点难理解，也是从头开始递归到尾部，达到尾部就是终止条件，即head.next == None。然后从尾部开始一个个反转节点，计算之前累计的递归函数，主要有两步：
 1. 将当前节点下一个节点的next指针指向自己。
 2. 将当前指针的next指针指向空，这样上一层递归函数可以返回值，并且执行反转操作。
+
 
 ## 92.Reverse Linked List II(Medium)
 
@@ -252,7 +255,7 @@ class Solution:
 
 **思路**：创建一个新的头指针，然后遍历两个链表，依次把小的元素所在的链表接入创建的指针。边界情况一个是其中一个链表为空，另一个情况是两个链表长度不一，一个链表会优先遍历完，直接把另一个链表接到最后即可。
 
-## 23. Merge k Sorted Lists(Hard)
+## 23.Merge k Sorted Lists(Hard)
 
 [https://leetcode-cn.com/problems/merge-k-sorted-lists/](https://leetcode-cn.com/problems/merge-k-sorted-lists/)
 
@@ -308,19 +311,48 @@ class Solution:
 class Solution:
     def deleteDuplicates(self, head: ListNode) -> ListNode:
         if not head: return
-        slower, faster = head, head.next
+        slower, faster = head, head
         while faster:
-            while faster and  slower.val == faster.val:
+            while faster and slower.val == faster.val:
                 faster = faster.next
             slower.next = faster
-            if not faster: break
-
-            slower = slower.next
-            faster = faster.next
+            slower = faster
+            
         return head
 ```
 
-**思路**：和第26题唯一不一样的地方就是数据结构从列表换成了链表，但是解题思路是一样的，设计一个快指针和慢指针。快指针遇到和慢指针指向元素值一样则跳过，大于慢指针则更新慢指针，快指针继续向前搜索。
+**思路**：和第26题唯一不一样的地方就是数据结构从列表换成了链表，但是解题思路是一样的，设计一个快指针和慢指针。快指针遇到和慢指针指向元素值一样则跳过，大于慢指针则更新慢指针，快指针继续向前搜索。  
+
+
+## 82.删除排序链表中的重复元素II(Medium)
+
+[https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list-ii/](https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list-ii/)
+
+### Description
+存在一个按升序排列的链表，给你这个链表的头节点 head ，请你删除链表中所有存在数字重复情况的节点，只保留原始链表中 没有重复出现 的数字。
+返回同样按升序排列的结果链表。
+
+### Solution
+```python
+class Solution:
+    def deleteDuplicates(self, head: ListNode) -> ListNode:
+        if not head: return
+        dummy = ListNode()
+        dummy.next = head
+        a = dummy
+        b = head
+        while b and b.next:
+            if a.next.val == b.next.val:
+                while b and b.next and a.next.val == b.next.val:
+                    b = b.next
+                a.next = b.next
+                b = b.next
+            else:
+                a = a.next
+                b = b.next
+        return dummy.next
+```
+思路：比较`.next.val`
 
 
 ## 19. Remove Nth Node From End of List(Medium)
@@ -569,6 +601,44 @@ class Solution:
         return dic[head]
 ```
 思路： 利用字典复制链表节点。
+
+
+## 2. 两数相加(Medium)
+
+[https://leetcode-cn.com/problems/add-two-numbers/](https://leetcode-cn.com/problems/add-two-numbers/)
+
+### Description
+给你两个 非空 的链表，表示两个非负的整数。它们每位数字都是按照 逆序 的方式存储的，并且每个节点只能存储 一位 数字。
+请你将两个数相加，并以相同形式返回一个表示和的链表。
+你可以假设除了数字 0 之外，这两个数都不会以 0 开头。
+
+
+### Solution
+```python
+class Solution:
+    def addTwoNumbers(self, l1: ListNode, l2: ListNode) -> ListNode:
+        head = ListNode(l1.val + l2.val)
+        cur = head
+        while l1.next or l2.next:
+            l1 = l1.next if l1.next else ListNode()
+            l2 = l2.next if l2.next else ListNode()
+            cur.next = ListNode(l1.val + l2.val + cur.val // 10)
+            cur.val = cur.val % 10
+            cur = cur.next
+        if cur.val >= 10:
+            cur.next = ListNode(cur.val // 10)
+            cur.val = cur.val % 10
+        return head
+```
+思路：  
+1. 先将l1和l2头节点的值加起来赋值给新链表的头节点
+2. 遍历两个链表，只要有一个链表还没有遍历到末尾，就继续遍历
+3. 每次遍历生成一个当前节点cur的下一个节点，其值为两链表对应节点的和再加上当前节点cur产生的进位  
+4. 更新进位后的当前节点cur的值
+5. 循环结束后，因为首位可能产生进位，因此如果cur.val是两位数的话，新增一个节点
+6. 返回头节点
+
+
 
 
 

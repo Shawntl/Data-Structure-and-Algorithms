@@ -21,6 +21,7 @@
 * 189 Rotate array
 * 205.Isomorphic Strings
 * 118.Pascal's Triangle
+* [54. 螺旋矩阵](#54螺旋矩阵medium)
 
 
 ## 1. Two Sum(Easy)
@@ -621,6 +622,35 @@ class Solution:
         return ret
 ```
 思路：每一行第一个数和最后一个数和上一行相同都是1，所以初始化每一行都为1，更新中间数通过上一行递推，当前元素tmp[j] = 上一行相同位置元素 + 上一行相同位置元素的前一个元素。
+
+## 54.螺旋矩阵(Medium)
+
+[https://leetcode-cn.com/problems/spiral-matrix/submissions/](https://leetcode-cn.com/problems/spiral-matrix/submissions/)
+
+### Solution
+```python
+class Solution:
+    def spiralOrder(self, matrix: List[List[int]]) -> List[int]:
+        if not matrix: return []
+        up, down = 0, len(matrix) - 1
+        l, r = 0, len(matrix[0]) - 1
+        res = []
+        while l <= r and up <= down:
+            for i in range(l, r+1):
+                res.append(matrix[up][i])
+            for i in range(up+1, down+1):
+                res.append(matrix[i][r])
+            if l < r and up < down:
+                for i in range(r-1, l-1, -1):
+                    res.append(matrix[down][i])
+                for i in range(down-1, up, -1):
+                    res.append(matrix[i][l])
+            l += 1
+            r -= 1
+            up += 1
+            down -= 1
+        return res
+```
 
 
 

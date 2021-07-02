@@ -8,7 +8,7 @@
 
 ## Content
 ### 回溯
-* 22.Generate Parentheses
+[22. 括号生成](#22括号生成medium)
 * 77.Combinations
 * 46.Permutations
 * 47.Permutations II
@@ -19,7 +19,7 @@
 * 113.Path Sum II
 
 
-## 22.Generate Parenthese(Medium)
+## 22.括号生成(Medium)
 
 [https://jmq.h5.xeknow.com/s/3nk3lb](https://jmq.h5.xeknow.com/s/3nk3lb)
 
