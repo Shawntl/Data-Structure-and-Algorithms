@@ -24,7 +24,7 @@
 * 746.Min Cost Climbing Stairs
 * 91.Decode Ways
 * 343.Integer Break
-* 53.Maximum Subarray
+* [53. 最大子序和](#53-最大子序和medium)
 * 152.Maximum Product Subarray
 * 3.Longest Substring Without Repeating Characters
 * 300.Longest Increasing Subsequence
@@ -54,8 +54,7 @@
 ### 最长公共子序列
 * 1143.Longest Common Subsequence
 * 221.Maximal Square
-* 72.Edit Distance
-
+* [72. 编辑距离](#72-编辑距离hard)
 ### 字符串
 * 647.Palindormic Substrings
 * 5.Longest Palindromic Substring
@@ -153,7 +152,7 @@ class Solution:
 ```
 思路：dp[i]定义为大小为i的整数通过拆分，可以获得的最大乘积。它一定由上一次拆分而转移来，设上一次拆分大小为j，剩下的（i-j）可以拆也可以不拆。如果不拆乘积为j*(i-j);如果拆乘积为j*dp[i-j].取两者最大值。
 
-## 53. Maximum Subarray(Medium)
+## 53. 最大子序和(Medium)
 
 [https://leetcode-cn.com/problems/maximum-subarray/](https://leetcode-cn.com/problems/maximum-subarray/)
 
@@ -818,7 +817,7 @@ class Solution:
 和最长子序列那道题的相似点就在于，状态空间都由当前格子以上、以左的区间来定义。值的大小由上、左、左上三个格子的最优解来递推。  
 
 
-## 72. Edit Distance(Hard)
+## 72. 编辑距离(Hard)
 
 [https://leetcode-cn.com/problems/edit-distance/](https://leetcode-cn.com/problems/edit-distance/)
 
