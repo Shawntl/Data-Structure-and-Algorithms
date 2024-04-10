@@ -32,7 +32,8 @@
 * 103.Binary Tree Zigzag Level Order Traversal
 
 ## DFS  
-* 200.Number of Island
+* [200. 岛屿数量](#200-岛屿数量medium) 
+* [130. 被围绕的区域](#130-被围绕的区域medium)
 
 
 ## 102.Binary Tree Level order traversal(Medium)
@@ -154,7 +155,7 @@ class Solution:
 ```
 思路：正常层序遍历完，再把偶数层反转。
 
-## 200. Number of Island(Medium)
+## 200. 岛屿数量(Medium)
 
 [https://leetcode-cn.com/problems/number-of-islands/](https://leetcode-cn.com/problems/number-of-islands/)
 
@@ -187,5 +188,46 @@ class Solution:
 思路：遍历矩阵，遇到'1', count+1。 然后开始对当前'1'附近上下左右进行dfs搜索，如果遇到'1'就把他们改成'0'.因为这代表他们在一个岛屿。直到将所有在一个岛屿上的'1'都变成'0'。等到下次再遇到'1'，count+1.
 
 
+## 130. 被围绕的区域(Medium)
 
+
+### Description
+给你一个 m x n 的矩阵 board ，由若干字符 'X' 和 'O' ，找到所有被 'X' 围绕的区域，并将这些区域里所有的 'O' 用 'X' 填充。
+
+### Solution
+```python
+class Solution:
+    def solve(self, board: List[List[str]]) -> None:
+        """
+        Do not return anything, modify board in-place instead.
+        """
+        n, m = len(board), len(board[0])
+
+        def DFSMasking(i, j):
+            if i < 0 or j < 0 or i >= n or j >= m or board[i][j] != 'O':
+                return
+            board[i][j] = '#'
+            DFSMasking(i + 1, j)
+            DFSMasking(i - 1, j)
+            DFSMasking(i, j + 1)
+            DFSMasking(i, j - 1)
+
+        for i in range(n):
+            DFSMasking(i, 0)
+            DFSMasking(i, m - 1)
+
+        for j in range(m):
+            DFSMasking(0, j)
+            DFSMasking(n-1, j)
+
+        for i in range(n):
+            for j in range(m):
+                if board[i][j] == 'O':
+                    board[i][j] = 'X'
+                if board[i][j] == '#':
+                    board[i][j] = 'O'
+```
+思路：本题可以用 DFS（深度优先搜索）解决。
+找到所有被 X 围绕的区域不容易，但是其等价于找到所有没有没有被 X 围绕的区域（连接边界的区域），这样就可以从边界上的 O 开始进行深度优先搜索。
+首先把边界上的'O'都变为'#'，然后遍历全图，所有的 O 改为 X 即可， 将所有的#改为 O。
 

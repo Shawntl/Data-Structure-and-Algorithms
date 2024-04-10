@@ -19,8 +19,9 @@
 ## 链表排序
 * 148 Sort List
 * 21 Merge Two Sorted Lists
-* 23.Merge k Sorted Lists(Hard)
+* [23. 合并K个升序链表](#23-合并K个升序链表hard)
 
+* [237. 删除链表中的节点](#237-删除链表中的节点easy)
 * 83 Remove Duplicates from Sorted List(Recap 26、80)
 * [82. 删除排序链表中的重复元素II](#82删除排序链表中的重复元素IImedium)
 * 19 Remove Nth Node From End of List
@@ -255,7 +256,7 @@ class Solution:
 
 **思路**：创建一个新的头指针，然后遍历两个链表，依次把小的元素所在的链表接入创建的指针。边界情况一个是其中一个链表为空，另一个情况是两个链表长度不一，一个链表会优先遍历完，直接把另一个链表接到最后即可。
 
-## 23.Merge k Sorted Lists(Hard)
+## 23. 合并K个升序链表(Hard)
 
 [https://leetcode-cn.com/problems/merge-k-sorted-lists/](https://leetcode-cn.com/problems/merge-k-sorted-lists/)
 
@@ -298,6 +299,21 @@ class Solution:
 ```
 思路：归并排序思路，将k个链表向下分治为合并两个链表合并排序的子问题，再向上合并。
 
+
+## 237. 删除链表中的节点(Easy)
+
+[https://leetcode-cn.com/problems/delete-node-in-a-linked-list/](https://leetcode-cn.com/problems/delete-node-in-a-linked-list/)
+
+### Solution
+```python
+class Solution:
+    def deleteNode(self, node):
+        """
+        :type node: ListNode
+        :rtype: void Do not return anything, modify node in-place instead.
+        """
+        node.val, node.next = node.next.val, node.next.next
+```
 
 ## 83. Remove Duplicates from Sorted List(Easy)
 

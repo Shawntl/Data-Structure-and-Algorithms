@@ -53,6 +53,7 @@
 
 ### 最长公共子序列
 * 1143.Longest Common Subsequence
+* 718.最长重复子数组
 * 221.Maximal Square
 * [72. 编辑距离](#72-编辑距离hard)
 ### 字符串
@@ -247,6 +248,31 @@ class Solution:
         return max(dp)
 ```
 思路：这道题和最大子序和不同的地方在于子结构不能单由上一个dp[i-1]计算，而是需要遍历0~i-1的dp储存值，找到最优解。dp[i]的含义依然是以i结尾的序列中最长上升子序列。
+
+
+## 718. 最长重复子数组(Medium)
+
+[https://leetcode.cn/problems/maximum-length-of-repeated-subarray/description/](https://leetcode.cn/problems/maximum-length-of-repeated-subarray/description/)
+
+### Description
+给两个整数数组 nums1 和 nums2 ，返回 两个数组中 公共的 、长度最长的子数组的长度 。
+
+### Solution
+```python
+class Solution:
+    def findLength(self, nums1: List[int], nums2: List[int]) -> int:
+        dp = [[0]*len(nums2) for _ in range(len(nums1))]
+        res = 0
+        for i in range(len(nums1)):
+            for j in range(len(nums2)):
+                if i == 0 or j == 0:
+                    dp[i][j] = int(nums1[i]==nums2[j])
+                elif nums1[i] == nums2[j]:
+                    dp[i][j] = dp[i-1][j-1] + 1
+                res = max(dp[i][j], res)
+        return res
+```
+思路：子序列可以是不连续的，子串必须是连续的。该题是找公共子串。构建二维dp数组后，每一位代表以当前位置结尾的连续公共子串的长度，两个数组在当前位置元素相同的前提下，加上左上角的数值再加1即为当前位置的状态。
 
 
 ## 322. Coin Change(Medium)
