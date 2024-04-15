@@ -7,38 +7,211 @@
 ## 背包问题具备的特征  
 是否可以根据一个**target（直接给出或间接求出)**，target可以是数字也可以是字符串，再给定一个数组arrs,问：能否使用arrs中的各元素做各种排列组合得到target.  再就是要思考一下递推公式
 常见背包问题可分为：
-## content
-### 完全背包问题
-如果是完全背包，即数组中的元素可重复使用，target循环正序。如果不考虑arrs中顺序，arrs放在外循环，target在内循环。
-```python
-for ele in arrs:
-    for i in range(ele, target+1):
-```
-* 322.Coin Change
-* 279.Perfect Squares
-* 518.Coin Change II  
 
-考虑arrs中的顺序（一旦顺序改变就不能得到target了），arrs放在内循环，target在外循环。
-```python
-for i in range(1, target+1):
-    for ele in arrs:
-```
-* 139.Word Break
-* 377.Combination Sum IV  
 
 ### 01背包问题
-如果是01背包问题，即数组中的元素不可以重复使用，target循环逆序。如果不考虑arrs中顺序，arrs放在外循环，target在内循环。
+对于背包问题，有一种写法， 是使用二维数组，即dp[i][j] 表示从下标为[0-i]的物品里任意取，0为不使用数组中的物品，1为数组中第一个物品。放进容量为j的背包，价值总和最大是多少。第一行为不使用物品时各容量下的背包放入后价值总和，初始化为0。一般从第二行第一列开始遍历。
 ```python
-for ele in arrs:
-    for i in range(target, ele-1, -1):
+for i in range(1, len(arrs)+1):
+    for j in range(target+1):
 ```
-* 416.Partition Equal Subset Sum
-* 494.Target Sum  
-### 二维01背包
-两个变量组成target
-* 474.Ones and Zeros
+* [416. 分割等和子集](#416-分割等和子集Medium)
+* [1049. 最后一块石头的重量II](#1049-最后一块石头的重量iiMedium)
+* [494. 目标和](#494-目标和Medium)  
+* [474. 一和零](#474-一和零Medium)
 
-## 322. Coin Change(Medium)
+## content
+### 完全背包问题
+如果是完全背包，即数组中的元素可重复使用，和01背包问题不同点在于当前物品不是只能当前状态被使用，之前状态也可以使用，故考虑左侧方格和上方方格的转移即可。
+* [322. 零钱兑换](#322-零钱兑换Medium) 
+* [279. 完全平方数](#279-完全平方数Medium)
+* [518. 零钱兑换II](#518-零钱兑换IIMedium)  
+
+
+物品放入考虑顺序，可以当作爬楼梯问题来处理。
+* [139. 单词拆分](#139-单词拆分Medium)
+* [377. 组合总和IV](#377-组合总和ivMedium)  
+
+
+
+## 416. 分割等和子集(Medium)
+
+[https://leetcode-cn.com/problems/partition-equal-subset-sum/](https://leetcode-cn.com/problems/partition-equal-subset-sum/)
+
+## Description
+能不能装满容量为target的背包
+
+### Solution
+```python
+class Solution:
+    def canPartition(self, nums: List[int]) -> bool:
+        if sum(nums) % 2 != 0:
+            return False
+        target = sum(nums) // 2
+        # 转化成nums中多个物品放入target的01背包问题
+        # 1.dp[i][j]的含义是nums中0-i个数装入容量为j的背包时,背包的最大重量；
+        #   0代表不装物品，1代表nums中第一个物品背包的最大重量。
+        # 2. 递推公式：dp[i][j] = max(dp[i-1][j], dp[i-1][j-nums[i-1]]+nums[i-1])
+        #    dp[i-1][j]意思是nums中第i个数不放入背包的最大重量
+        #    dp[i-1][j-nums[i-1]]+nums[i-1]意思是第i个数放入j容量的背包后的最大容量
+
+        # 3.初始化dp,
+        #   第一行表示要考虑没有物品时，可装包的最大重量
+        #   第一列表示包的容量为零时
+        dp = [[0]*(target+1) for _ in range(len(nums)+1)]
+        
+        # 4.从第1个物品（第二行），容量为0开始遍历
+        for i in range(1, len(nums)+1):
+            for j in range(target+1):
+                if j < nums[i-1]:
+                    # 包的容量还没有当前物品重的时候
+                    dp[i][j] = dp[i-1][j]
+                else:
+                    dp[i][j] = max(dp[i-1][j], dp[i-1][j-nums[i-1]]+nums[i-1])
+        # 背包容量为target时最大重量是否等于target
+        if dp[len(nums)][target] == target:
+            return True
+        else:
+            return False
+```
+思路：01背包问题
+
+
+
+## 1049. 最后一块石头的重量II(Medium)
+
+[https://leetcode.cn/problems/last-stone-weight-ii/description/](https://leetcode.cn/problems/last-stone-weight-ii/description/)
+
+## Description
+有一堆石头，用整数数组 stones 表示。其中 stones[i] 表示第 i 块石头的重量。
+
+每一回合，从中选出任意两块石头，然后将它们一起粉碎。假设石头的重量分别为 x 和 y，且 x <= y。那么粉碎的可能结果如下：
+
+如果 x == y，那么两块石头都会被完全粉碎；
+如果 x != y，那么重量为 x 的石头将会完全粉碎，而重量为 y 的石头新重量为 y-x。
+最后，最多只会剩下一块 石头。返回此石头 最小的可能重量 。如果没有石头剩下，就返回 0。
+
+### Solution
+```python
+class Solution:
+    def lastStoneWeightII(self, stones: List[int]) -> int:
+        target = sum(stones) // 2
+        # 本题其实就是尽量让石头分成重量相同的两堆，相撞之后剩下的石头最小，这样就化解成01背包问题了
+        # 即总容量最多能对撞掉多少
+
+        # 1.dp[i][j]的含义是nums中0-i个数装入容量为j的背包时，背包的最大重量；
+        #   0代表不装物品，1代表nums中第一个物品背包的最大重量。
+        # 2. 递推公式：dp[i][j] = max(dp[i-1][j], dp[i-1][j-nums[i-1]]+nums[i-1])
+        #    dp[i-1][j]意思是nums中第i个数不放入背包的最大重量
+        #    dp[i-1][j-nums[i-1]]+nums[i-1]意思是第i个数放入j容量的背包后的最大容量
+
+        # 3.初始化dp,
+        #   第一行表示要考虑没有物品时，可装包的最大重量
+        #   第一列表示包的容量为零时
+        dp = [[0]*(target+1) for _ in range(len(stones)+1)]
+    
+        
+        # 4.从第1个物品（第二行），容量为0开始遍历
+        for i in range(1, len(stones)+1):
+            for j in range(target+1):
+                if j < stones[i-1]:
+                    # 包的容量还没有当前物品重的时候
+                    dp[i][j] = dp[i-1][j]
+                else:
+                    dp[i][j] = max(dp[i-1][j], dp[i-1][j-stones[i-1]]+stones[i-1])
+        # 背包容量为target时能装的最大重量即使能够粉碎的石头的最大值，剩余即为最小值
+        return sum(stones) - 2*dp[len(stones)][target]
+```
+思路：和上题类似，一个是能否装满target，一个是target最多能装多少。都需要动规迭代求dp[len(nums)-1][target]的值。
+
+
+## 494. 目标和(Medium)
+
+[https://leetcode-cn.com/problems/target-sum/](https://leetcode-cn.com/problems/target-sum/)
+
+### Solution
+```python
+class Solution:
+    def findTargetSumWays(self, nums: List[int], target: int) -> int:
+        # 转化成01背包问题前，背包容量和arrs需要进行一步转化
+        # 设x为nums中前面为加号的数之和，y为nums中前面为减号的数之和
+        # x+y=sum(nums), x-y=target：求的x = (target+sum(nums)) // 2
+        # 即求装满x容量的背包一共多少种方法
+        if abs(sum(nums)) < abs(target): return 0
+        if (target+sum(nums)) % 2 != 0:
+            return 0
+        x = (target+sum(nums)) // 2
+
+        # 1. 定义dp[i][j]为使用nums中0至i个物品能装满容量j背包的方法数,第0个物品是重量为0的物品
+        # 2. 递推公式：dp[i][j] = dp[i-1][j]+dp[i-1][j-nums[i-1]]
+        #    i表示nums中第i个物品，nums[i-1]就是第i个物品的重量，i从1开始
+        #    dp[i-1][j]表示不用第i个物品能装满j的方法数
+        #    dp[i-1][j-nums[i-1]]表示使用第i个物品能装满j的方法数,每个物品只能使用一次，即如果当前使用了，上一个状态一定由i-1转移而来，即左上角方格而不是左边。
+
+        # 3. 初始化第一行和dp[0][0]，第一行的含义是物品重量为0时可以填满j容量背包的方法数
+        #    dp[0][0]=1的含义是0容量的背包可以被0重量的物品填满，
+        dp = [[0]*(x+1) for _ in range(len(nums)+1)]
+        dp[0][0] = 1
+        # 4. 从第1个实际物品，容量为0开始遍历。
+        for i in range(1, len(nums)+1):
+            for j in range(x+1):
+                if j < nums[i-1]:
+                    dp[i][j] = dp[i-1][j]
+                else:
+                    dp[i][j] = dp[i-1][j]+dp[i-1][j-nums[i-1]]
+        return dp[len(nums)][x]
+```
+思路：和前两题最大的不同是背包容量需要推导，且物品重量可以是0，导致dp[0][0]初始化为1
+
+
+## 474. 一和零(Medium)
+
+[https://leetcode-cn.com/problems/ones-and-zeroes/](https://leetcode-cn.com/problems/ones-and-zeroes/)
+
+### Solution
+```python
+class Solution:
+    def findMaxForm(self, strs: List[str], m: int, n: int) -> int:
+        # 1. dp[i][j][k]的含义是字符数组中的0-i字符（0表示没有字符），能放满j个0,k个1容量背包的最多字符个数（最大长度）
+        # 2.递推公式：dp[i][j][k] = max(dp[i-1][j][k], dp[i-1][j-zeroNum][k-oneNum]+1)
+        #     dp[i-1][j][k]表示不用用当前字符串满足背包要求的最大长度
+        #     dp[i-1][j-zeroNum][k-oneNum]+1表示使用当前字符串满足背包要求的最大长度
+
+        # 3.初始化dp,
+        #   i=0表示要考虑没有物品时，可装包的最多物品数
+        #   j=0表示背包的'0'字符容量为零时
+        #   k=0表示背包的'1'字符容量为零时
+        dp = [[[0]*(n + 1) for _ in range(m + 1)] for _ in range(len(strs)+1)]
+        # 4.从第一个字符开始遍历，'0'和'1'的容量都为0开始遍历
+        for i in range(1, len(strs)+1):  # 遍历物品
+            zeroNum = strs[i-1].count('0')  # 统计0的个数
+            oneNum = len(strs[i-1]) - zeroNum  # 统计1的个数
+            for j in range(m+1):  
+                for k in range(n+1):
+                    # 如果物品中'0'和'1'的含量已经超过背包'0'和‘1’的容量
+                    if j < zeroNum or k < oneNum:
+                        dp[i][j][k] = dp[i-1][j][k]
+                    else:
+                        dp[i][j][k] = max(dp[i-1][j][k], dp[i-1][j-zeroNum][k-oneNum]+1)
+
+        return dp[len(strs)][m][n]
+```
+
+
+<br>
+
+## 01背包总结
+```
+416、1049 target均为物品数组和的一半，求放入容量为target的背包的最大价值，这里的价值就是物品的重量。
+
+494 target需要稍微推导一下，求放满容量为target的背包的方法数，由上方和左上角累加得到。
+
+474 target由两个变量构成，求放满target两个变量容量后的最大价值，这里的价值就是物品的数量。
+```
+
+<br>
+
+## 322. 零钱兑换(Medium)
 
 [https://leetcode-cn.com/problems/coin-change/](https://leetcode-cn.com/problems/coin-change/)
 
@@ -50,16 +223,30 @@ for ele in arrs:
 ```python
 class Solution:
     def coinChange(self, coins: List[int], amount: int) -> int:
-        dp = [0] + [float('inf')]*amount
-        for coin in coins:
-            # 当背包最后一个硬币为固定面值时，需要的最少个数。然后改变硬币面值迭代dp里的值
-            for i in range(coin, amount+1):
-                dp[i] = min(dp[i], dp[i-coin]+1)
-        return dp[-1] if dp[-1] != float('inf') else -1
+        # 1.dp[i][j]含义是0-i个硬币可以填满j容量背包最大价值（最小硬币量）
+        # 2.递推公式：dp[i][j] = min(dp[i-1][j], dp[i][j-coins[i-1]])
+        #   dp[i-1][j]表示不使用第i个硬币
+        #   dp[i][j-coins[i-1]]表示使用第i个硬币
+
+        # 3.初始化
+        dp = [[float('inf')]*(amount+1) for _ in range(len(coins)+1)]
+        dp[0][0] = 0
+        
+        # 4.从第1个硬币，容量为0开始遍历
+        for i in range(1, len(coins)+1):
+            for j in range(amount+1):
+                if j < coins[i-1]:
+                    dp[i][j] = dp[i-1][j]
+                else:
+                    dp[i][j] = min(dp[i-1][j], dp[i][j-coins[i-1]]+1)
+        if dp[len(coins)][amount] == float('inf'):
+            return -1
+        else:
+            return dp[len(coins)][amount]
 ```
 思路：当前填满容量j最少需要的硬币 = min( 之前填满容量j最少需要的硬币, 填满容量 j - coin 需要的硬币 + 1个当前硬币）
 
-## 279.Perfect Squares(Medium)
+## 279. 完全平方数(Medium)
 
 [https://leetcode-cn.com/problems/perfect-squares/](https://leetcode-cn.com/problems/perfect-squares/)
 
@@ -67,15 +254,28 @@ class Solution:
 ```python
 class Solution:
     def numSquares(self, n: int) -> int:
-        dp = [0] + [float('inf')]*n
-        for num in range(1, round(n**0.5)+1):
-            for i in range(num*num, n+1):
-                dp[i] = min(dp[i], dp[i-num*num]+1)
-        return dp[-1]
+        # 1.dp[i][j]含义是使用0-i个硬币，他们的平方和可以填满j容量背包最大价值（最小硬币量）
+        # 2.递推公式：dp[i][j] = min(dp[i-1][j], dp[i][j-coins[i-1]*coins[i-1]]+1)
+        #   dp[i-1][j]表示不使用第i个硬币
+        #   dp[i][j-coins[i-1]]表示使用第i个硬币
+        coins = [coin for coin in range(1, int(n**0.5)+1)]
+        # 3.初始化
+        dp = [[float('inf')]*(n+1) for _ in range(len(coins)+1)]
+        dp[0][0] = 0
+        
+        # 4.从第1个硬币，容量为0开始遍历
+        for i in range(1, len(coins)+1):
+            for j in range(n+1):
+                if j < coins[i-1]*coins[i-1]:
+                    dp[i][j] = dp[i-1][j]
+                else:
+                    dp[i][j] = min(dp[i-1][j], dp[i][j-coins[i-1]*coins[i-1]]+1)
+        
+        return dp[len(coins)][n]
 ```
 思路： 完全背包问题，元素可重复且不考虑顺序。和322零钱兑换类似。
 
-## 518. Coin Change II(Medium)
+## 518. 零钱兑换II(Medium)
 
 [https://leetcode-cn.com/problems/coin-change-2/](https://leetcode-cn.com/problems/coin-change-2/)
 
@@ -83,15 +283,27 @@ class Solution:
 ```python
 class Solution:
     def change(self, amount: int, coins: List[int]) -> int:
-        dp = [1] + [0]*amount
-        for coin in coins:
-            for i in range(coin, amount+1):
-                dp[i] += dp[i-coin]
-        return dp[-1]
-```
-思路：当前凑成总金额的组合数 = 原来凑成总金额的组合数 + 最后一个硬币为当前面值时凑成总金额的组合数。
+        # 1.dp[i][j]含义是使用 0-i个物品填满（0表示不使用物品）j容量的背包，所有的方法数
+        # 2.递推公式：dp[i][j] = dp[i-1][j] + dp[i][j-coins[i-1]]
+        #   dp[i-1][j]表示不使用第i个物品的方法数
+        #   dp[i][j-coins[j-1]]表示使用第i个物品的方法数，因为第i个物品可以使用多次，所以从左侧方格转移而来，而不是从左上角，左上角意味着本次使用是唯一一次使用coins[i-1]
 
-## 139.Word Break(Medium)
+        # 3.初始化dp
+        dp = [[0]*(amount+1) for _ in range(len(coins)+1)]
+        dp[0][0] = 1
+
+        # 4.从第一个物品，容量为0开始遍历
+        for i in range(1, len(coins)+1):
+            for j in range(amount+1):
+                if j < coins[i-1]:
+                    dp[i][j] = dp[i-1][j]
+                else:
+                    dp[i][j] = dp[i-1][j] + dp[i][j-coins[i-1]]
+        return dp[len(coins)][amount]
+```
+
+
+## 139. 单词拆分(Medium)
 
 [https://leetcode-cn.com/problems/word-break/](https://leetcode-cn.com/problems/word-break/)
 
@@ -99,17 +311,23 @@ class Solution:
 ```python
 class Solution:
     def wordBreak(self, s: str, wordDict: List[str]) -> bool:
-        dp = [True] + [False]*len(s)
+        # 1.dp[i]表示s字符前i个字符是否可以被列表中字符拼接出来
+        # 2.递推公式：dp[i] = dp[i] or dp[i-len(word)] 
+
+        # 3.初始化dp
+        dp = [False]*(len(s)+1)
+        dp[0] = True
+
+        # 4.从字符串第一个字符开始遍历
         for i in range(1, len(s)+1):
             for word in wordDict:
-                if (i >= len(word)) and (s[i-len(word):i] == word):
-                    dp[i] = dp[i] or dp[i-len(word)]
-        return dp[-1]
+                if i >= len(word) and s[i-len(word):i] == word:
+                    dp[i] = dp[i] or dp[i-len(word)] 
+        return dp[len(s)]
 ```
-思路：转化为是否可以用 wordDict 中的词组合成 s，完全背包问题，并且为“考虑排列顺序的完全背包问题”，外层循环为 target ，内层循环为选择池 wordDict
 
 
-## 377.Combination Sum IV(Medium)
+## 377. 组合总和IV(Medium)
 
 [https://leetcode-cn.com/problems/combination-sum-iv/](https://leetcode-cn.com/problems/combination-sum-iv/)
 
@@ -117,85 +335,35 @@ class Solution:
 ```python
 class Solution:
     def combinationSum4(self, nums: List[int], target: int) -> int:
-        dp = [1] + [0]*target
+        # 1.dp[i]含义：采用nums中一次可上楼梯层数的方法数，有多少种方法可以到达高为i的台阶
+        # 2.递推公式：dp[i] += dp[i-nums[i-1]] for i in range(len(nums))
+        # 3.初始化：dp, dp[0]表示0级台阶往上任何台阶爬都有1种方法
+        dp = [0]*(target+1)
+        dp[0] = 1
+        # 4.从第一级台阶，第一种爬楼梯方法开始遍历
         for i in range(1, target+1):
             for num in nums:
                 if i >= num:
                     dp[i] += dp[i-num]
-
-        return dp[-1]
+        return dp[target]
 ```
-思路：完全背包问题考虑顺序的组合问题，和518题零钱兑换2唯一不同的一点是考虑顺序，不同顺序的组合视为不同。
 
-## 416.Partition Equal Subset Sum(Medium)
 
-[https://leetcode-cn.com/problems/partition-equal-subset-sum/](https://leetcode-cn.com/problems/partition-equal-subset-sum/)
+<br>
 
-## Description
-能不能装满容量为target的背包
-
-### Solution
-```python
-class Solution:
-    def canPartition(self, nums: List[int]) -> bool:
-        sumAll = sum(nums)
-        if sumAll % 2:
-            return False
-        target = sumAll // 2
-        dp = [True] + [False]*target
-        for num in nums:
-            # 倒序
-            for i in range(target, num-1, -1):
-                dp[i] = dp[i] or dp[i-num]
-        return dp[-1]
+## 完全背包总结
 ```
-思路：当前target是否能装满 = 之前就能装满 or 最后加入当前num后能装满，倒序因为状态是由前往后转移的，而数组中的元素不能重复使用。
+322、279 求装满背包的最大价值(最少硬币数)，dp[0][0]初始化为0就好，因为递推公式中会累加硬币的价值即硬币个数。
 
-## 494.Target Sum(Medium)
+518 求放满容量为target的背包的方法数，dp[0][0]需要初始化为1，因为递推公式只涉及之前状态的值。
 
-[https://leetcode-cn.com/problems/target-sum/](https://leetcode-cn.com/problems/target-sum/)
-
-### Solution
-```python
-class Solution:
-    def findTargetSumWays(self, nums: List[int], target: int) -> int:
-        sumAll = sum(nums)
-        if (target+sumAll) % 2:
-            return 0
-        S = (target+sumAll) // 2
-        dp = [1]+[0]*S
-        for num in nums:
-            for i in range(S, num-1, -1):
-                dp[i] += dp[i-num]
-        return dp[-1]
+139、377 因为考虑放入背包的物品顺序，不像纯粹的背包问题，更像是爬楼梯问题，我们当作爬楼梯问题处理
 ```
-思路：先将本问题转换为01背包问题。
-假设所有符号为+的元素和为x，符号为-的元素和的绝对值是y。
-我们想要的 target = 正数和 - 负数和 = x - y
-而已知x与y的和是数组总和：x + y = sum
-可以求出 x = (target + sum) / 2 = S
-也就是我们要从nums数组里选出几个数，令其和为S
-于是就转化成了求容量为target的01背包问题 =>要装满容量为target的背包，有多少种组合，数组元素不能重复，和上一题一样倒序，状态转移方程和518题类似：  
-当前凑成S的组合数 = 原来凑成S的组合数 + 最后一个元素为当前元素时凑成S的组合数。
 
-## 474.Ones aand Zeros(Medium)
+<br>
 
-[https://leetcode-cn.com/problems/ones-and-zeroes/](https://leetcode-cn.com/problems/ones-and-zeroes/)
 
-### Solution
-```python
-class Solution:
-    def findMaxForm(self, strs: List[str], m: int, n: int) -> int:
-        # 背包最多能装m个0和n个1时的最大子集个数
-        dp = [[0]*(n+1) for _ in range(m+1)]
-        for ele in strs:
-            zeros = ele.count('0')
-            ones = ele.count('1')
-            # 01背包问题，元素不能重复，倒序
-            for i in range(m, zeros-1, -1):
-                for j in range(n, ones-1, -1):
-                    # 当前元素放入背包或不放入背包
-                    dp[i][j] = max(dp[i][j], dp[i-zeros][j-ones]+1)
-        return dp[-1][-1]
-```
+
+
+
 
