@@ -371,57 +371,7 @@ class Solution:
 思路：比较`.next.val`
 
 
-## 19. Remove Nth Node From End of List(Medium)
 
-[https://leetcode-cn.com/problems/remove-nth-node-from-end-of-list/](https://leetcode-cn.com/problems/remove-nth-node-from-end-of-list/)
-
-### Description
-给定一个链表，删除链表的倒数第 n 个节点，并且返回链表的头结点.
-
-### Solution(hash table)
-```python
-class Solution:
-    def removeNthFromEnd(self, head: ListNode, n: int) -> ListNode:
-        if not head: return
-        pointer_dict = {}
-        idx = 1
-        cur = head
-        while cur:
-            pointer_dict[idx] = cur
-            cur = cur.next
-            idx += 1
-        pointer_dict[idx] = cur
-        length = idx
-        # 删除头节点的情况
-        if length == n+1:
-            return head.next
-        pointer_dict[length-n-1].next = pointer_dict[length-n+1]
-        return head
-```
-
-**思路**：题目中要求遍历一遍来求解，我自然而然就想到利用空间换时间，利用字典把遍历过程中每个节点的下标储存起来，遍历过后用O(1)的时间找到需要删除的元素。
-
-### Solution Two(双指针 快慢)
-```python
-class Solution:
-    def removeNthFromEnd(self, head: ListNode, n: int) -> ListNode:
-        if not head: return
-        # 利用dummy处理删除头节点的情况
-        dummy = ListNode()
-        dummy.next = head
-        p1, p2 = dummy, dummy
-        # p1、p2中间相间隔n-1个节点
-        for i in range(n):
-            p2 = p2.next
-        # 当p2达到链表最后一个节点时，p1到达待删除节点的前一个节点
-        while p2.next:
-            p1 = p1.next
-            p2 = p2.next
-        p1.next = p1.next.next
-        return dummy.next
-```
-
-**思路**：这种思路非常巧妙，利用两个指针构建一个n size的划窗，划窗尾部到底时，首部也就找到了倒数第n个元素。这里由于是两个指针一前一后遍历所以时间复杂度要略高于第一种方法，但是节省了空间。
 
 
 ## 24. Swap Nodes in Pairs(Medium)
