@@ -5,76 +5,37 @@
 
 # 链表
 
-## Recap
-* 141 Linked List Cycle
-这道题使用快慢指针，根据快指针是否“套圈”慢指针来判断是否形成环。  
 
-## Content
-* 160 Intersectionof Two Linked Lists(Recap 141)
 ## 链表反转
-* 206.Reverse Linked List
-* 92.Reverse Linked List II
-* 25.Reverse Nodes in k-Group
+* [206. 反转链表](#206-反转链表easy)
+* [92.  反转链表 II](#206-反转链表easy)
+* [25. K 个一组翻转链表](#25-k-个一组翻转链表hard)
 
-## 链表排序
-* 148 Sort List
-* 21 Merge Two Sorted Lists
+## 排序链表
+* [148. 排序链表](#148-排序链表medium)
+* [21. 合并两个有序链表](#21-合并两个有序链表easy)
 * [23. 合并K个升序链表](#23-合并K个升序链表hard)
 
+## 修改链表
 * [237. 删除链表中的节点](#237-删除链表中的节点easy)
-* 83 Remove Duplicates from Sorted List(Recap 26、80)
+* [83. 删除排序链表中的重复元素](#83-删除排序链表中的重复元素easy)
 * [82. 删除排序链表中的重复元素II](#82删除排序链表中的重复元素IImedium)
-* 19 Remove Nth Node From End of List
-* 24 Swap Nodes in Pairs
-* 445 Add Two  Numbers II
-* 234 Palindrome Linked List(Recap 125、680 in 对撞双指针)
-* 725 Split Linked List in Parts
-* 328 Odd Even Linked List
-* 138.Copy List with Random Pointer
+* [24. 两两交换链表中的节点](#24-两两交换链表中的节点medium)
+* [725. 分隔链表](#725-分隔链表medium)
+* [328. 奇偶链表](#328-奇偶链表medium)
+
+## 链表相加
 * [2. 两数相加](#2-两数相加medium)
+* [445. 两数相加 II](#445-两数相加-iimedium)
 
-## 160. Intersection of Two Linked Lists(Easy)
+## 链表属性
+* [234. 回文链表](#234-回文链表easy)
 
-[https://leetcode-cn.com/problems/intersection-of-two-linked-lists/](https://leetcode-cn.com/problems/intersection-of-two-linked-lists/)
-
-
-### Description
-编写一个程序，找到两个单链表相交的起始节点。
-
-### Solution(Two Pointers)
-```python
-class Solution:
-    def getIntersectionNode(self, headA: ListNode, headB: ListNode) -> ListNode:
-        if not headA or not headB: return None
-        
-        def length(head: ListNode):
-            n = 0
-            while head:
-                head = head.next
-                n += 1
-            return n
-        # 计算两个链表长度
-        len1, len2 = length(headA), length(headB)
-        # 将第一个链表永远保持为长链表
-        if len1 < len2:
-            headA, headB = headB, headA
-        # 让第一个链表先走多出第二个链表的长度
-        for _ in range(abs(len1 - len2)):
-            headA = headA.next
-        # 两个指针同时遍历相同长度的链表，相等则找到相交点
-        while headA != headB:
-            headA, headB = headA.next, headB.next
-        return headA
-```
-
-**思路**：首先想到用双指针分别遍历两个链表，指针元素相同时则找到相交点。但只有两个链遍遍历时长度相同才能把保证。所以：
-1. 计算两个链表长度，并算出长链表比短链表多的长度n。
-2. 让长链表的头指针先行n步，和短链表处在同一起点。
-3. 开始用双指针遍历两个链表。
-4. 指针元素相同时，找到相交点，返回当前元素。
+## 链表复制
+* [138. 随机链表的复制](#138-随机链表的复制medium)
 
 
-## 206. Reverse Linked List(Easy)
+## 206. 反转链表(Easy)
 
 [https://leetcode-cn.com/problems/reverse-linked-list/](https://leetcode-cn.com/problems/reverse-linked-list/)
 
@@ -122,7 +83,7 @@ class Solution:
 2. 将当前指针的next指针指向空，这样上一层递归函数可以返回值，并且执行反转操作。
 
 
-## 92.Reverse Linked List II(Medium)
+## 92. 反转链表 II(Medium)
 
 [https://leetcode-cn.com/problems/reverse-linked-list-ii/](https://leetcode-cn.com/problems/reverse-linked-list-ii/)
 
@@ -151,7 +112,7 @@ class Solution:
 思路：首先找到反转起点left，在进行链表反转。
 
 
-## 25.Reverse Nodes in k-Group(Hard)
+## 25.  K 个一组翻转链表(Hard)
 
 [https://leetcode-cn.com/problems/reverse-nodes-in-k-group/](https://leetcode-cn.com/problems/reverse-nodes-in-k-group/)
 
@@ -185,7 +146,7 @@ class Solution:
         return last
 ```
 
-## 148 Sort List(Medium)
+## 148. 排序链表(Medium)
 
 [https://leetcode-cn.com/problems/sort-list/](https://leetcode-cn.com/problems/sort-list/)
 
@@ -225,7 +186,7 @@ class Solution:
 ```
 思路：归并排序的思想。
 
-## 21. Merge Two Sorted Lists(Easy)
+## 21. 合并两个有序链表(Easy)
 
 [https://leetcode-cn.com/problems/merge-two-sorted-lists/](https://leetcode-cn.com/problems/merge-two-sorted-lists/)
 
@@ -315,7 +276,7 @@ class Solution:
         node.val, node.next = node.next.val, node.next.next
 ```
 
-## 83. Remove Duplicates from Sorted List(Easy)
+## 83. 删除排序链表中的重复元素(Easy)
 
 [https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list/](https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list/)
 
@@ -374,7 +335,7 @@ class Solution:
 
 
 
-## 24. Swap Nodes in Pairs(Medium)
+## 24. 两两交换链表中的节点(Medium)
 
 [https://leetcode-cn.com/problems/swap-nodes-in-pairs/](https://leetcode-cn.com/problems/swap-nodes-in-pairs/)
 
@@ -403,7 +364,45 @@ class Solution:
 ```
 **思路**：两两交换，注意核心是设置哨兵节点当作第二个节点的头节点。
 
-## 445.Add Two Numbers II(Medium)
+## 2. 两数相加(Medium)
+
+[https://leetcode-cn.com/problems/add-two-numbers/](https://leetcode-cn.com/problems/add-two-numbers/)
+
+### Description
+给你两个 非空 的链表，表示两个非负的整数。它们每位数字都是按照 逆序 的方式存储的，并且每个节点只能存储 一位 数字。
+请你将两个数相加，并以相同形式返回一个表示和的链表。
+你可以假设除了数字 0 之外，这两个数都不会以 0 开头。  
+输入：l1 = [2,4,3], l2 = [5,6,4]  
+输出：[7,0,8]  
+解释：342 + 465 = 807.
+
+
+### Solution
+```python
+class Solution:
+    def addTwoNumbers(self, l1: ListNode, l2: ListNode) -> ListNode:
+        head = ListNode(l1.val + l2.val)
+        cur = head
+        while l1.next or l2.next:
+            l1 = l1.next if l1.next else ListNode()
+            l2 = l2.next if l2.next else ListNode()
+            cur.next = ListNode(l1.val + l2.val + cur.val // 10)
+            cur.val = cur.val % 10
+            cur = cur.next
+        if cur.val >= 10:
+            cur.next = ListNode(cur.val // 10)
+            cur.val = cur.val % 10
+        return head
+```
+思路：  
+1. 先将l1和l2头节点的值加起来赋值给新链表的头节点
+2. 遍历两个链表，只要有一个链表还没有遍历到末尾，就继续遍历
+3. 每次遍历生成一个当前节点cur的下一个节点，其值为两链表对应节点的和再加上当前节点cur产生的进位  
+4. 更新进位后的当前节点cur的值
+5. 循环结束后，因为首位可能产生进位，因此如果cur.val是两位数的话，新增一个节点
+6. 返回头节点
+
+## 445. 两数相加 II(Medium)
 
 [https://leetcode-cn.com/problems/add-two-numbers-ii/](https://leetcode-cn.com/problems/add-two-numbers-ii/)
 
@@ -411,7 +410,11 @@ class Solution:
 给你两个 非空 链表来代表两个非负整数。数字最高位位于链表开始位置。它们的每个节点只存储一位数字。将这两数相加会返回一个新的链表。
 你可以假设除了数字 0 之外，这两个数字都不会以零开头。
 要求：
-如果输入链表不能修改该如何处理？换句话说，你不能对列表中的节点进行翻转。
+如果输入链表不能修改该如何处理？换句话说，你不能对列表中的节点进行翻转。   
+
+
+输入：l1 = [7,2,4,3], l2 = [5,6,4]  
+输出：[7,8,0,7]
 
 ### Solution(Naive)
 ```python
@@ -435,7 +438,7 @@ class Solution:
 **思路**：第一直觉就是把两个链表转化成整数相加后再转回链表。
 
 
-## 234. Palindrome Linked List(Easy)
+## 234. 回文链表(Easy)
 
 [https://leetcode-cn.com/problems/palindrome-linked-list/](https://leetcode-cn.com/problems/palindrome-linked-list/)
 
@@ -464,7 +467,7 @@ class Solution:
 
 **思路**：利用列表栈的使用性质，第一次遍历将链表中的所有元素入栈，第二次遍历的同时执行出栈操作进行两两比较。第二次遍历的过程可以看成是125、680题中的双指针从头尾进行遍历。
 
-## 725. Split Linked List in Parts(Medium)
+## 725. 分隔链表(Medium)
 
 [https://leetcode-cn.com/problems/split-linked-list-in-parts/](https://leetcode-cn.com/problems/split-linked-list-in-parts/)
 
@@ -516,7 +519,7 @@ class Solution:
 ```
 **思路**：主要核心思路是求出整除的商，和余数。商代表每一份的链表长度，余数代表前几份链表的长度需要加一。
 
-## 328. Odd Even Linked List(Medium)
+## 328. 奇偶链表(Medium)
 
 [https://leetcode-cn.com/problems/odd-even-linked-list/](https://leetcode-cn.com/problems/odd-even-linked-list/)
 
@@ -543,66 +546,38 @@ class Solution:
 
 **思路**：设置两个指针，一个去把奇数位串起来，一个去把偶数位串起来。然后把第一位偶数节点放到最后一位奇数节点后。
 
-## 138.Copy List with Random Pointer(Medium)
+## 138. 随机链表的复制(Medium)
 
 [https://leetcode-cn.com/problems/copy-list-with-random-pointer/](https://leetcode-cn.com/problems/copy-list-with-random-pointer/)
+
+### Description
+给你一个长度为 n 的链表，每个节点包含一个额外增加的随机指针 random ，该指针可以指向链表中的任何节点或空节点。
+
+构造这个链表的 深拷贝。 深拷贝应该正好由 n 个 全新 节点组成，其中每个新节点的值都设为其对应的原节点的值。新节点的 next 指针和 random 指针也都应指向复制链表中的新节点，并使原链表和复制链表中的这些指针能够表示相同的链表状态。复制链表中的指针都不应指向原链表中的节点 。
 
 ### Solution
 ```python
 class Solution:
     def copyRandomList(self, head: 'Node') -> 'Node':
         if not head: return head
-        dic = {}
+        h = {}
         cur = head
-        # 建立老链表和新链表的节点 map
+        # 第一步将原链表的值存入字典
         while cur:
-            dic[cur] = Node(cur.val)
+            h[cur] = Node(cur.val)
             cur = cur.next
+        # 第二步拷贝原链表的指针
         p = head
-        # 复制索引
         while p:
-            dic[p].next = dic.get(p.next)
-            dic[p].random = dic.get(p.random)
+            h[p].next = h.get(p.next)
+            h[p].random = h.get(p.random)
             p = p.next
-        return dic[head]
+        return h[head]
 ```
 思路： 利用字典复制链表节点。
 
 
-## 2. 两数相加(Medium)
 
-[https://leetcode-cn.com/problems/add-two-numbers/](https://leetcode-cn.com/problems/add-two-numbers/)
-
-### Description
-给你两个 非空 的链表，表示两个非负的整数。它们每位数字都是按照 逆序 的方式存储的，并且每个节点只能存储 一位 数字。
-请你将两个数相加，并以相同形式返回一个表示和的链表。
-你可以假设除了数字 0 之外，这两个数都不会以 0 开头。
-
-
-### Solution
-```python
-class Solution:
-    def addTwoNumbers(self, l1: ListNode, l2: ListNode) -> ListNode:
-        head = ListNode(l1.val + l2.val)
-        cur = head
-        while l1.next or l2.next:
-            l1 = l1.next if l1.next else ListNode()
-            l2 = l2.next if l2.next else ListNode()
-            cur.next = ListNode(l1.val + l2.val + cur.val // 10)
-            cur.val = cur.val % 10
-            cur = cur.next
-        if cur.val >= 10:
-            cur.next = ListNode(cur.val // 10)
-            cur.val = cur.val % 10
-        return head
-```
-思路：  
-1. 先将l1和l2头节点的值加起来赋值给新链表的头节点
-2. 遍历两个链表，只要有一个链表还没有遍历到末尾，就继续遍历
-3. 每次遍历生成一个当前节点cur的下一个节点，其值为两链表对应节点的和再加上当前节点cur产生的进位  
-4. 更新进位后的当前节点cur的值
-5. 循环结束后，因为首位可能产生进位，因此如果cur.val是两位数的话，新增一个节点
-6. 返回头节点
 
 
 
